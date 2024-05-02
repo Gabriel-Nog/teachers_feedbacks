@@ -1,52 +1,52 @@
-@extends('welcome')
+<x-guest-layout>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-@section('title', 'Cadastro')
+        <!-- Name -->
+        <div>
+            <x-input-label for="name" :value="__('Name')" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
 
-@section('content')
-    <div class="w-full h-full p-3 grid place-items-center">
-        <form class="bg-white w-[600px] h-[500px] shadow-xl p-3 flex flex-col items-center gap-14" method="POST">
-            @csrf
-            <h1 class="text-4xl font-semibold">Crie uma conta</h1>
-            <div class="h-full flex flex-col gap-[30px] items-center text-lg">
-                <div
-                    class="w-[386px] border-[1.5px] border-transparent-70 border-solid border-[#0B3B60] h-10 flex items-center">
-                    <div
-                        class="h-[80%] w-9 grid place-items-center border-r-[1.5px] border-transparent-70 border-solid border-r-[#0B3B60]">
-                        <iconify-icon icon="ic:round-email" class="text-[#0B3B60]" width="26"
-                            height="22"></iconify-icon>
-                    </div>
-                    <input type="email" name="" id=""
-                        class="w-full border-transparent h-full outline-none px-2" placeholder="usuario@email.com">
-                </div>
-                <div
-                    class="w-[386px] border-[1.5px] border-transparent-70 border-solid border-[#0B3B60] h-10 flex items-center">
-                    <div
-                        class="h-[80%] w-9 grid place-items-center border-r-[1.5px] border-transparent-70 border-solid border-r-[#0B3B60]">
-                        <iconify-icon icon="material-symbols:id-card" class="text-[#0B3B60]" width="26"
-                            height="22"></iconify-icon>
-                    </div>
-                    <input type="text" name="" id=""
-                        class="w-full border-transparent h-full outline-none px-2" placeholder="CPF do usuário">
-                </div>
-                <div
-                    class="w-[386px] border-[1.5px] border-transparent-70 border-solid border-[#0B3B60] h-10 flex items-center relative">
-                    <div
-                        class="h-[80%] w-9 grid place-items-center border-r-[1.5px] border-transparent-70 border-solid border-r-[#0B3B60]">
-                        <iconify-icon icon="ri:lock-password-fill" class="text-[#0B3B60]" width="26"
-                            height="22"></iconify-icon>
-                    </div>
-                    <input type="password" name="" id=""
-                        class="w-full border-transparent h-full outline-none px-2" placeholder="Senha do usuário">
-                    <iconify-icon icon="fluent:eye-28-filled" width="32" height="24"
-                        class="absolute top-2 right-2 text-[#0B3B60]"></iconify-icon>
-                </div>
-                <button class="bg-[#0B3B60] text-lg font-bold text-white w-48 h-10">Fazer cadastro</button>
-            </div>
-            <span class="text-base mb-3">
-                Já possui uma conta?
-                <a href="/auth" class="bg-[#0B3B60] font-semibold text-white px-3 py-1">Ir para tela de login</a>
-            </span>
-        </form>
+        <!-- Email Address -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
 
-    </div>
-@endsection
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mt-4">
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                            type="password"
+                            name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
+                {{ __('Already registered?') }}
+            </a>
+
+            <x-primary-button class="ms-4">
+                {{ __('Register') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
