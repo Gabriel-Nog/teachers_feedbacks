@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title')</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @vite('resources/css/app.css')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -21,6 +21,7 @@
 
 <body class="bg-[#EDEEEF] w-screen h-screen">
     @yield('content')
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </body>
 
 </html>
