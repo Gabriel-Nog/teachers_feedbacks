@@ -44,24 +44,34 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function teachers(){
+    public function teachers()
+    {
         return $this->hasOne('App\Models\Teacher');
     }
 
-    public function students(){
+    public function students()
+    {
         return $this->hasOne('App\Models\Student');
     }
 
-    public function classeAsParticipant(){
+    public function userRole()
+    {
+        return $this->hasOne('App\Models\Role', 'id');
+    }
+
+    public function classeAsParticipant()
+    {
         return $this->belongsToMany('App\Models\Classes');
     }
 
 
-    public function subjectAsParticipant(){
+    public function subjectAsParticipant()
+    {
         return $this->belongsToMany('App\Models\Classes');
     }
 
-    public function studentAsFeedback(){
+    public function studentAsFeedback()
+    {
         return $this->hasOne('App\Models\Feedback');
     }
 }

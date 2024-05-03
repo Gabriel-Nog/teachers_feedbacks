@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,9 +10,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-     public function index()
+    public function index()
     {
-    
+
     }
 
     /**
@@ -40,9 +41,18 @@ class UserController extends Controller
 
     public function showAll()
     {
-        $users = DB::table('users')->get();
-    
-        return view('dashboard', ['users'=> $users]);
+        $users = User::all('*');
+        $teachers = [];
+        $students = [];
+        foreach ($users as $user) {
+            if ($user->userRole->name == 'teacher') {
+                array_push($teachers, $user);
+            }
+            if ($user->userRole->name == 'student') {
+                array_push($students, $user);
+            }
+        }
+        return view('dashboard', ['teachers' => $teachers, 'students' => $students]);
     }
 
     /**

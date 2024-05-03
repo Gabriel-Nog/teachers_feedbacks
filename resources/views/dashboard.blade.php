@@ -36,10 +36,10 @@
                             </x-t-row>
                         </x-table-head>
                         <x-table-body>
-                            @foreach ($users as $user)
+                            @foreach ($teachers as $user)
                                 <x-t-row>
                                     <x-t-data>{{ $user->name }}</x-t-data>
-                                    <x-t-data>{{ $user->status }}</x-t-data>
+                                    <x-t-data>{{ $user->userRole->name }}</x-t-data>
                                 </x-t-row>
                             @endforeach
                         </x-table-body>
