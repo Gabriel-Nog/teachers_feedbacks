@@ -16,7 +16,7 @@
                 <div
                     class="h-10 w-fit text-lg flex items-center gap-3 cursor-pointer text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-5 mb-4">
                     <span class="font-light hover:underline duration-200">Professores</span>/
-                    <span class="font-semibold underline hover:underline duration-200">Alunos</span>/
+                    <span class="font-semibold text-indigo-600 underline hover:underline duration-200">Alunos</span>/
                     <span class="font-light hover:underline duration-200">Turmas</span>
                 </div>
             </div>
