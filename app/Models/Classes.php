@@ -13,9 +13,14 @@ class Classes extends Model
         'name',
         'shift',
         'year',
+        'subjects_id',
         'user_id'
     ];
     public function user(){
         return $this->belongsTo('App\Models\User');
+    }
+
+    public function subject(){
+        return $this->belongsToM('App\Models\Subjects');
     }
 }

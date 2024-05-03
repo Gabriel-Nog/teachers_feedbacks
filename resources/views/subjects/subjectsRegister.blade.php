@@ -9,7 +9,7 @@
                 autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 <x-primary-button class="ms-2 mt-5 col-auto">
-                    {{ __('Register') }}
+                    {{ __('Registrar') }}
                 </x-primary-button>
         </div>
 

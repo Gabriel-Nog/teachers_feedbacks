@@ -27,14 +27,14 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $subject = new Subjects;
-        $subject -> name = $request -> subject;
+        $subject -> name = $request -> name;
         $subject ->user_id = auth()->user()->id;
 
         $subject->save();
 
         return redirect()
             ->route('dashboard')
-            ->with('msg', 'Edital Criado Com Sucesso!');
+            ->with('msg', 'Disciplina Criada Com Sucesso!');
     }
 
 
