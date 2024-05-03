@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'cpf',
         'password',
     ];
 
@@ -42,4 +43,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function teachers(){
+        return $this->hasOne('App\Models\Teacher');
+    }
+
+    public function students(){
+        return $this->hasOne('App\Models\Student');
+    }
+
+    public function classeAsParticipant(){
+        return $this->belongsToMany('App\Models\Classes');
+    }
+
+
+    public function subjectAsParticipant(){
+        return $this->belongsToMany('App\Models\Classes');
+    }
+
+    public function studentAsFeedback(){
+        return $this->hasOne('App\Models\Feedback');
+    }
 }
