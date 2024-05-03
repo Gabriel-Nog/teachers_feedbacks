@@ -1,19 +1,17 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Subjects;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
+        //
     }
 
     /**
@@ -40,29 +38,7 @@ class UserController extends Controller
         //
     }
 
-    public function showAll()
-    {
-        $users = User::all('*');
-        $teachers = [];
-        $students = [];
-        foreach ($users as $user) {
-            if ($user->userRole) {
-                if ($user->userRole->name == 'teacher') {
-                    array_push($teachers, $user);
-                }
-                if ($user->userRole->name == 'student') {
-                    array_push($students, $user);
-                }
-            }
-
-        }
-        $subjects = Subjects::all();
-        return view('dashboard', ['teachers' => $teachers, 'students' => $students, 'subjects' => $subjects]);
-    }
-    
-    
-    
-        /**
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)

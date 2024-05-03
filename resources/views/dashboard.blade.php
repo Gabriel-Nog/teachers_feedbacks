@@ -45,6 +45,26 @@
                         </x-table-body>
                     </x-table>
                 </div>
+                <div class="p-3 text-gray-900 dark:text-gray-100">
+                    <x-table>
+                        <x-table-head>
+                            <x-t-row>
+                                <x-t-head>{{ __('Disciplina') }}</x-t-head>
+                                <x-t-head>{{ __('Turma') }}</x-t-head>
+                                <x-t-head>{{ __('Avalie') }}</x-t-head>
+                                <x-t-head>{{ __('Comentário') }}</x-t-head>
+                            </x-t-row>
+                        </x-table-head>
+                        <x-table-body>
+                            @foreach ($subjects as $subject)
+                                <x-t-row>
+                                    <x-t-data>{{ $subject->name }}</x-t-data>
+                                    {{-- <x-t-data>{{ $subject-> }}</x-t-data> --}}
+                                </x-t-row>
+                            @endforeach
+                        </x-table-body>
+                    </x-table>
+                </div>
             </div>
         </div>
     </div>
