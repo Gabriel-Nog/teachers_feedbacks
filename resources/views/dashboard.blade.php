@@ -13,26 +13,6 @@
                     <iconify-icon icon="mage:filter-fill" class="text-white" width="20" height="20"></iconify-icon>
                     <span class="font-semibold ml-1">Filtros</span>
                 </button>
-                {{-- <div
-                    class="filters h-15 w-0 text-lg flex items-center gap-2 cursor-pointer duration-500 text-white bg-white dark:bg-gray-800 overflow-hidden whitespace-nowrap shadow-sm sm:rounded-lg px-0 mb-4 py-[2px]">
-                    <select name="" id=""
-                        class="bg-transparent border-2 border-solid border-white border-opacity-40  focus:border-indigo-600 rounded-md h-[80%] py-0">
-                        <option disabled selected class="bg-white dark:bg-gray-800 font-semibold">Tipo de busca
-                        </option>
-                        <option value="name" class="bg-white dark:bg-gray-800">
-                            Nome
-                        </option>
-                        <option value="class" class="bg-white dark:bg-gray-800">
-                            Turma
-                        </option>
-                        <option value="status" class="bg-white dark:bg-gray-800">
-                            Status
-                        </option>
-                    </select>
-                    <input type="search"
-                        class="bg-transparent border-2 w-full border-solid border-white border-opacity-40 focus:border-indigo-600 rounded-md h-[80%] py-0"
-                        placeholder="Buscar por registro">
-                </div> --}}
                 <x-filter></x-filter>
                 <div
                     class="h-15 min-w-fit text-lg flex items-center cursor-pointer text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-4 py-[2px]">
@@ -57,11 +37,11 @@
                         </x-table-head>
                         <x-table-body>
                             @foreach ($users as $user)
-                            <x-t-row>
-                                <x-t-data>{{ $user->name }}</x-t-data>
-                                <x-t-data>{{ $user->status }}</x-t-data>
-                            </x-t-row>
-                                @endforeach
+                                <x-t-row>
+                                    <x-t-data>{{ $user->name }}</x-t-data>
+                                    <x-t-data>{{ $user->status }}</x-t-data>
+                                </x-t-row>
+                            @endforeach
                         </x-table-body>
                     </x-table>
                 </div>
