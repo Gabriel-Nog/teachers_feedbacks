@@ -47,7 +47,7 @@
         </div>
 
         <!-- Role -->
-        {{-- <div class="col-start-1 col-end-3">
+        <div class="col-start-1 col-end-3">
             <x-input-label for="roles" :value="__('Atribuição')" />
             <x-input-error :messages="$errors->get('roles')" class="mt-2" />
                 <select {{ $errors->has('roles_id') ? 'is-invalid' : '' }}
@@ -58,7 +58,7 @@
                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
                 </select>
-        </div> --}}
+        </div>
 
         <div class="flex items-center justify-end col-span-2">
             <x-primary-button class="ms-4">

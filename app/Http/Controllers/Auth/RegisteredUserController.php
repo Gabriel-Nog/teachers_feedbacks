@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
 {
@@ -21,7 +22,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $roles = DB::table('roles')->get();
+        return view('auth.register', ['roles' => $roles]);
     }
 
     /**
@@ -35,6 +37,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'cpf'  => ['required', 'string', 'max:20', 'unique:'.User::class],
+            'roles_id' => ['required', 'int'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -43,6 +46,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'email_verified_at' => now(),
             'cpf' => $request->cpf,
+            'roles_id' => $request->roles_id,
             'password' => Hash::make($request->password),
             'remember_token' => Str::random(10),
         ]);

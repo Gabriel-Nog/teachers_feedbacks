@@ -55,6 +55,7 @@ class PermissionsSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make(env('ADMIN_PASSWORD', 'admin$123')),
             'cpf' => '12345678912',
+            'roles_id' => '1'
         ]);
 
         $admin->assignRole($superAdminRole);

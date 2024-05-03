@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'cpf',
         'password',
+        'roles_id'
     ];
 
     /**
@@ -74,4 +75,5 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Feedback');
     }
+
 }
