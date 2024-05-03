@@ -23,7 +23,6 @@
 
 <body class="bg-[#EDEEEF] w-screen h-screen">
     @yield('content')
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </body>
 
 </html>
