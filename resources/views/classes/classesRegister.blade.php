@@ -14,8 +14,8 @@
             <x-text-input id="year" class="block mt-1 w-full" type="text" name="year" :value="old('year')" required
                 autofocus autocomplete="year" />
             <x-input-label for="subject" :value="__('Disciplina para adicionar:')" />
-            <select {{ $errors->has('subject_id') ? 'is-invalid' : '' }}"
-                name="subject" id="subjects">
+            <select {{ $errors->has('subjects_id') ? 'is-invalid' : '' }}"
+                name="subjects_id" id="subjects_id">
                 <option value="">Selecione</option>
                 @foreach ($subjects as $subject)
                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>

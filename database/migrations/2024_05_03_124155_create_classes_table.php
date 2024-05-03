@@ -16,9 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('shift');
             $table->string('year');
-            $table
-            ->foreignId('subjects_id')
-            ->constrained('subjects');
+            $table->foreignId('subjects_id');
             $table->foreignId('user_id');
             $table->timestamps();
         });

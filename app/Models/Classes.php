@@ -21,6 +21,6 @@ class Classes extends Model
     }
 
     public function subject(){
-        return $this->belongsToM('App\Models\Subjects');
+        return $this->hasOne('App\Models\Subjects');
     }
 }

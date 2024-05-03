@@ -33,7 +33,7 @@ class ClassesController extends Controller
         $classes -> name = $request -> name;
         $classes -> shift = $request -> shift;
         $classes -> year = $request -> year;
-        $classes-> subjects_id = $request->subject;
+        $classes-> subjects_id = $request->subjects_id;
         $classes ->user_id = auth()->user()->id;
         $classes->save();
 
