@@ -45,12 +45,15 @@ class UserController extends Controller
         $teachers = [];
         $students = [];
         foreach ($users as $user) {
-            if ($user->userRole->name == 'teacher') {
-                array_push($teachers, $user);
+            if ($user->userRole) {
+                if ($user->userRole->name == 'teacher') {
+                    array_push($teachers, $user);
+                }
+                if ($user->userRole->name == 'student') {
+                    array_push($students, $user);
+                }
             }
-            if ($user->userRole->name == 'student') {
-                array_push($students, $user);
-            }
+
         }
         return view('dashboard', ['teachers' => $teachers, 'students' => $students]);
     }
