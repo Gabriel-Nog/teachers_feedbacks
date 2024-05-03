@@ -22,7 +22,7 @@
         <div>
             <x-input-label for="subjects" :value="__('Disciplina para adicionar:')" />
             <select {{ $errors->has('subjects_id') ? 'is-invalid' : '' }}
-                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1"
+                class="max-w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1"
                 name="subjects_id" id="subjects">
                 <option disabled select>Selecione a disciplina</option>
                 @foreach ($subjects as $subject)
