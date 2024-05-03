@@ -35,6 +35,7 @@
         </main>
     </div>
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <script src="./js/events.js"></script>
 </body>
 
 </html>

@@ -7,24 +7,47 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="w-full h-fit flex gap-5">
-                <div
-                    class="h-10 w-fit text-lg flex items-center cursor-pointer hover:bg-gray-600 duration-300 text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-3 mb-4">
+            <div class="w-full h-fit flex gap-3">
+                <button onclick="openFilters()"
+                    class="h-18 min-w-fit w-fit text-lg flex items-center cursor-pointer hover:bg-gray-700 duration-300 text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-3 mb-4 py-[2px]">
                     <iconify-icon icon="mage:filter-fill" class="text-white" width="20" height="20"></iconify-icon>
-                    <span class="font-semibold ml-3">Filtros</span>
+                    <span class="font-semibold ml-1">Filtros</span>
+                </button>
+                <div
+                    class="filters h-15 w-0 text-lg flex items-center gap-2 cursor-pointer duration-500 text-white bg-white dark:bg-gray-800 overflow-hidden whitespace-nowrap shadow-sm sm:rounded-lg px-0 mb-4 py-[2px]">
+                    <select name="" id=""
+                        class="bg-transparent border-2 border-solid border-white border-opacity-40  focus:border-indigo-600 rounded-md h-[80%] py-0">
+                        <option disabled selected class="bg-white dark:bg-gray-800 font-semibold">Tipo de busca
+                        </option>
+                        <option value="name" class="bg-white dark:bg-gray-800">
+                            Nome
+                        </option>
+                        <option value="class" class="bg-white dark:bg-gray-800">
+                            Turma
+                        </option>
+                        <option value="status" class="bg-white dark:bg-gray-800">
+                            Status
+                        </option>
+                    </select>
+                    <input type="search"
+                        class="bg-transparent border-2 w-full border-solid border-white border-opacity-40 focus:border-indigo-600 rounded-md h-[80%] py-0"
+                        placeholder="Buscar por registro">
                 </div>
                 <div
-                    class="h-10 w-fit text-lg flex items-center gap-3 cursor-pointer text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-5 mb-4">
-                    <span class="font-light hover:underline duration-200">Professores</span>/
-                    <span class="font-semibold text-indigo-600 underline hover:underline duration-200">Alunos</span>/
-                    <span class="font-light hover:underline duration-200">Turmas</span>
+                    class="h-15 min-w-fit text-lg flex items-center cursor-pointer text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-4 py-[2px]">
+                    <span
+                        class="w-full font-light hover:text-indigo-600 border-b-2 border-solid border-transparent hover:border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2">Professores</span>
+                    <span
+                        class="w-full font-semibold text-indigo-600 border-b-2 border-solid border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2">Alunos</span>
+                    <span
+                        class="w-full font-ligh hover:text-indigo-600 border-b-2 border-solid border-transparent hover:border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2">Turmas</span>
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-4 text-gray-900 dark:text-gray-100">
+                <div class="p-3 text-gray-900 dark:text-gray-100">
                     <x-table>
                         <x-table-head>
-                            <x-t-row class="border-b-2 border-solid border-white border-opacity-20">
+                            <x-t-row>
                                 <x-t-head>{{ __('Nome') }}</x-t-head>
                                 <x-t-head>{{ __('Turma') }}</x-t-head>
                                 <x-t-head>{{ __('Status') }}</x-t-head>
