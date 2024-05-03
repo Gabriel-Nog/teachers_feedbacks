@@ -11,9 +11,22 @@
                 </div>
 
                 <!-- Navigation Links -->
+                {{-- Dashboard --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+                {{-- Disciplinas --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('subjects.subjectsRegister')" :active="request()->routeIs('subjectsRegister/create')">
+                        {{ __('Criar Disciplinas') }}
+                    </x-nav-link>
+                </div>
+                {{-- Turmas --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('classes.classesRegister')" :active="request()->routeIs('classesRegister/create')">
+                        {{ __('Criar Turmas') }}
                     </x-nav-link>
                 </div>
             </div>

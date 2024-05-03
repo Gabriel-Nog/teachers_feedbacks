@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ClassesController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,10 +17,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 Route::middleware('auth')->group(function () {
