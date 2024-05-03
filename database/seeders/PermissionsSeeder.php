@@ -4,12 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Feedback;
 use App\Models\User;
+use App\Models\Subjects;
+use App\Models\Classes;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use Illuminate\Support\Facades\DB;
 
 class PermissionsSeeder extends Seeder
 {
