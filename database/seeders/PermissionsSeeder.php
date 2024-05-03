@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -25,14 +26,26 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'create teacher']);
         Permission::create(['name' => 'attach class']);
         Permission::create(['name' => 'attach subject']);
+        Permission::create(['name' => 'create class']);
+        Permission::create(['name' => 'create subject']);
 
         $superAdminRole = Role::create(['name' => 'super-admin']);
         $superAdminRole->givePermissionTo('feedback');
         $superAdminRole->givePermissionTo('comment');
         $superAdminRole->givePermissionTo('create student');
         $superAdminRole->givePermissionTo('create teacher');
+        $superAdminRole->givePermissionTo('create class');
+        $superAdminRole->givePermissionTo('create subject');
         $superAdminRole->givePermissionTo('attach class');
         $superAdminRole->givePermissionTo('attach subject');
+
+        $teacher = Role::create((['name' => 'teacher']));
+        $teacher->givePermissionTo('attach class');
+        $teacher->givePermissionTo('attach subject');
+
+        $student = Role::create((['name' => 'student']));
+        $student->givePermissionTo(('feedback'));
+        $student->givePermissionTo(('comment'));
 
         $admin = User::factory()->create([
             'name' => 'Admin User',
@@ -42,5 +55,7 @@ class PermissionsSeeder extends Seeder
         ]);
 
         $admin->assignRole($superAdminRole);
+
+
     }
 }
