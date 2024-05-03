@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Admin dashboard') }}
+            {{ Auth::user()->name }}
         </h2>
     </x-slot>
 
@@ -56,30 +56,12 @@
                             </x-t-row>
                         </x-table-head>
                         <x-table-body>
+                            @foreach ($users as $user)
                             <x-t-row>
-                                <x-t-data>{{ __('Jair') }}</x-t-data>
-                                <x-t-data>{{ __('ADS 2022.1') }}</x-t-data>
-                                <x-t-data>{{ __('Ativo') }}</x-t-data>
-                                <x-t-data>{{ __('Editar') }}</x-t-data>
+                                <x-t-data>{{ $user->name }}</x-t-data>
+                                <x-t-data>{{ $user->status }}</x-t-data>
                             </x-t-row>
-                            <x-t-row>
-                                <x-t-data>{{ __('Kauã Santiago') }}</x-t-data>
-                                <x-t-data>{{ __('S.I 2024.1') }}</x-t-data>
-                                <x-t-data>{{ __('Ativo') }}</x-t-data>
-                                <x-t-data>{{ __('Editar') }}</x-t-data>
-                            </x-t-row>
-                            <x-t-row>
-                                <x-t-data>{{ __('João Gabriel') }}</x-t-data>
-                                <x-t-data>{{ __('C.C 2022.1') }}</x-t-data>
-                                <x-t-data>{{ __('Ativo') }}</x-t-data>
-                                <x-t-data>{{ __('Editar') }}</x-t-data>
-                            </x-t-row>
-                            <x-t-row>
-                                <x-t-data>{{ __('Aglayrton Julião') }}</x-t-data>
-                                <x-t-data>{{ __('ADS 1543.1') }}</x-t-data>
-                                <x-t-data>{{ __('Ativo') }}</x-t-data>
-                                <x-t-data>{{ __('Editar') }}</x-t-data>
-                            </x-t-row>
+                                @endforeach
                         </x-table-body>
                     </x-table>
                 </div>
