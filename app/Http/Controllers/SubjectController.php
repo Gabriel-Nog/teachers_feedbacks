@@ -27,7 +27,7 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $subject = new Subjects;
-        $subject -> name = $request -> name;
+        $subject -> name = $request -> subject;
         $subject ->user_id = auth()->user()->id;
 
         $subject->save();
