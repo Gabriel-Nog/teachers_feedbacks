@@ -5,6 +5,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,10 +25,11 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [UserController::class, 'showAll'])->name('dashboard');
-    Route::get('subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
-    Route::post('subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
-    Route::get('classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
-    Route::post('classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+    Route::get('/subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
+    Route::post('/subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
+    Route::get('/classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
+    Route::post('/classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+    Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedbacks.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -87,7 +87,6 @@
                                         <x-t-data>{{ $class->name }}</x-t-data>
                                         <x-t-data>{{ $class->year }}</x-t-data>
                                         <x-t-data class="uppercase">{{ $class->shift }}</x-t-data>
-                                        <x-t-data>{{ __('') }}</x-t-data>
                                     </x-t-row>
                                 @endforeach
                             @endif

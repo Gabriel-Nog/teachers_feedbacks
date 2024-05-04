@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
@@ -19,7 +20,7 @@ class FeedbackController extends Controller
      */
     public function create()
     {
-        //
+        // return view('feedbacks.feedback');
     }
 
     /**
@@ -27,7 +28,17 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $feedback = new Feedback;
+        $feedback -> like = $request -> like;
+        $feedback ->deslike = $request ->deslike;
+        $feedback ->comment = $request ->comment;
+
+        $feedback->save();
+
+        return redirect()
+            ->route('dashboard')
+            ->with('msg', 'Feedback Com Sucesso!');
     }
 
     /**
