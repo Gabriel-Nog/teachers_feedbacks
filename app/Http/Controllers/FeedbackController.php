@@ -28,16 +28,30 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $feedback = new Feedback;
-        $feedback -> like = $request -> like;
-        $feedback ->deslike = $request ->deslike;
-        $feedback ->comment = $request ->comment;
+        $request->validate([
+            'feedback_action' => ['required', 'string', 'in:like,dislike'],
+            'comment' => ['required', 'string'],
+            'teacher_id' => ['required', 'int'],
+        ], ['feedback_action.in' => 'erro']);
 
+        $fields = collect(['like', 'dislike']);
+        $fieldAdded = $fields->filter(function($field) use ($request) {
+            return $field === $request->feedback_action;
+        })->first();
+        $fieldRemove = $fields->filter(function($field) use ($request) {
+            return $field !== $request->feedback_action;
+        })->first();
+
+        $feedback = new Feedback();
+
+        $feedback[$fieldAdded] = 1;
+        $feedback[$fieldRemove] = 0;
+        $feedback['comment'] = $request->comment;
+        $feedback['user_id'] = $request->teacher_id;
         $feedback->save();
 
         return redirect()
-            ->route('dashboard')
+            ->back()
             ->with('msg', 'Feedback Com Sucesso!');
     }
 

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
             $table->integer('like');
-            $table->integer('deslike');
+            $table->integer('dislike');
             $table->text('comment');
             $table->foreignId('user_id');
             $table->timestamps();

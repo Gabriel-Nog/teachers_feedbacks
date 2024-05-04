@@ -14,6 +14,9 @@ class Feedback extends Model
         'comment',
         'user_id',
     ];
+
+    protected $table = "feedbacks";
+
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
