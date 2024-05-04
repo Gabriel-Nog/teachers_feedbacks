@@ -62,13 +62,13 @@ class User extends Authenticatable
 
     public function classeAsParticipant()
     {
-        return $this->belongsToMany('App\Models\Classes');
+        return $this->hasOne('App\Models\Classes', 'user_id');
     }
 
 
     public function subjectAsParticipant()
     {
-        return $this->belongsToMany('App\Models\Classes');
+        return $this->hasOne('App\Models\Classes');
     }
 
     public function studentAsFeedback()

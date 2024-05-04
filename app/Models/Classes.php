@@ -16,11 +16,13 @@ class Classes extends Model
         'subjects_id',
         'user_id'
     ];
-    public function user(){
-        return $this->belongsTo('App\Models\User');
+    public function user()
+    {
+        return $this->belongsToMany('App\Models\User', 'id');
     }
 
-    public function subject(){
+    public function subject()
+    {
         return $this->hasOne('App\Models\Subjects');
     }
 }

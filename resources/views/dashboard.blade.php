@@ -16,12 +16,25 @@
                 <x-filter></x-filter>
                 <div
                     class="h-15 min-w-fit text-lg flex items-center cursor-pointer text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-4 py-[2px]">
-                    <span
-                        class="w-full font-light hover:text-indigo-600 border-b-2 border-solid border-transparent hover:border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2">Professores</span>
-                    <span
-                        class="w-full font-semibold text-indigo-600 border-b-2 border-solid border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2">Alunos</span>
-                    <span
-                        class="w-full font-ligh hover:text-indigo-600 border-b-2 border-solid border-transparent hover:border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2">Turmas</span>
+                    @php
+                        $baseClass =
+                            'w-full font-light hover:text-indigo-600 border-b-2 border-solid border-transparent hover:border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2';
+                        $activedClass =
+                            'w-full font-light font-semibold text-indigo-600 border-b-2 border-solid border-b-indigo-600 hover:bg-indigo-600/10 duration-200 p-1 px-2';
+                        $isEmpty =
+                            request('type') != 'students' &&
+                            request('type') != 'teachers' &&
+                            request('type') != 'classes'
+                                ? true
+                                : false;
+                    @endphp
+
+                    <a class="{{ request('type') == 'teachers' ? $activedClass : $baseClass }}"
+                        href="/dashboard?type=teachers">Professores</a>
+                    <a class="{{ request('type') == 'students' || $isEmpty ? $activedClass : $baseClass }}"
+                        href="/dashboard?type=students">Alunos</a>
+                    <a class="{{ request('type') == 'classes' ? $activedClass : $baseClass }}"
+                        href="/dashboard?type=classes">Turmas</a>
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -36,12 +49,31 @@
                             </x-t-row>
                         </x-table-head>
                         <x-table-body>
-                            @foreach ($teachers as $user)
-                                <x-t-row>
-                                    <x-t-data>{{ $user->name }}</x-t-data>
-                                    <x-t-data>{{ $user->userRole->name }}</x-t-data>
-                                </x-t-row>
-                            @endforeach
+                            @if (request('type') == 'teachers')
+                                @foreach ($teachers as $user)
+                                    <x-t-row>
+                                        <x-t-data>{{ $user->name }}</x-t-data>
+                                        <x-t-data class="uppercase">{{ $user->userRole->name }}</x-t-data>
+                                    </x-t-row>
+                                @endforeach
+                            @endif
+                            @if (request('type') == 'students' || $isEmpty)
+                                @foreach ($students as $user)
+                                    <x-t-row>
+                                        <x-t-data>{{ $user->name }}</x-t-data>
+                                        <x-t-data class="uppercase">{{ $user->userRole->name }}</x-t-data>
+                                    </x-t-row>
+                                @endforeach
+                            @endif
+                            @if (request('type') == 'classes')
+                                @foreach ($classes as $class)
+                                    <x-t-row>
+                                        <x-t-data>{{ $class->name }}</x-t-data>
+                                        <x-t-data class="uppercase">{{ $class->shift }}</x-t-data>
+                                    </x-t-row>
+                                @endforeach
+                            @endif
+
                         </x-table-body>
                     </x-table>
                 </div>

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -41,7 +42,9 @@ class UserController extends Controller
 
     public function showAll()
     {
+
         $users = User::all('*');
+        $classes = Classes::all('*');
         $teachers = [];
         $students = [];
         foreach ($users as $user) {
@@ -55,7 +58,7 @@ class UserController extends Controller
             }
 
         }
-        return view('dashboard', ['teachers' => $teachers, 'students' => $students]);
+        return view('dashboard', ['teachers' => $teachers, 'students' => $students, 'classes' => $classes]);
     }
 
     /**
