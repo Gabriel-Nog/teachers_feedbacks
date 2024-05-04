@@ -35,10 +35,12 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'cpf' => ['required', 'string', 'max:20', 'unique:' . User::class],
+            'cpf' => ['required', 'string', 'regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', 'unique:' . User::class],
             'role_id' => ['required', 'int'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        $request['cpf'] = preg_replace('/[^0-9]/', '', $request->cpf);
 
         $role = Role::findOrFail($request->role_id);
 
