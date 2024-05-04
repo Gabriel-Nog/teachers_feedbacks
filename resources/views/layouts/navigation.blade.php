@@ -18,22 +18,29 @@
                     </x-nav-link>
                 </div>
                 {{-- Disciplinas --}}
+                @can('create subject')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('subjects.subjectsRegister')" :active="request()->routeIs('subjectsRegister/create')">
                         {{ __('Criar Disciplinas') }}
                     </x-nav-link>
                 </div>
+                @endcan
                 {{-- Turmas --}}
+                @can('create class')    
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('classes.classesRegister')" :active="request()->routeIs('classesRegister/create')">
                         {{ __('Criar Turmas') }}
                     </x-nav-link>
                 </div>
+                @endcan
+                {{--ADD user--}}
+                @can(['create student', 'create teacher'])    
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
                         {{ __('Adicionar usuário') }}
                     </x-nav-link>
                 </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->
