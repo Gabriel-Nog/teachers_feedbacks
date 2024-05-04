@@ -31,24 +31,29 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'attach subject']);
         Permission::create(['name' => 'create class']);
         Permission::create(['name' => 'create subject']);
+        Permission::create(['name' => 'view all']);
+        Permission::create(['name' => 'view teacher']);
+        Permission::create(['name' => 'view student']);
+
 
         $superAdminRole = Role::create(['name' => 'super-admin']);
-        $superAdminRole->givePermissionTo('feedback');
-        $superAdminRole->givePermissionTo('comment');
-        $superAdminRole->givePermissionTo('create student');
-        $superAdminRole->givePermissionTo('create teacher');
-        $superAdminRole->givePermissionTo('create class');
-        $superAdminRole->givePermissionTo('create subject');
-        $superAdminRole->givePermissionTo('attach class');
-        $superAdminRole->givePermissionTo('attach subject');
+        $superAdminRole->givePermissionTo(['feedback']);
+        $superAdminRole->givePermissionTo(['comment']);
+        $superAdminRole->givePermissionTo(['create student']);
+        $superAdminRole->givePermissionTo(['create teacher']);
+        $superAdminRole->givePermissionTo(['create class']);
+        $superAdminRole->givePermissionTo(['create subject']);
+        $superAdminRole->givePermissionTo(['attach class']);
+        $superAdminRole->givePermissionTo(['attach subject']);
+        $superAdminRole->givePermissionTo(['view all']);
 
-        $teacher = Role::create((['name' => 'teacher']));
-        $teacher->givePermissionTo('attach class');
-        $teacher->givePermissionTo('attach subject');
+        $teacher = Role::create(['name' => 'teacher']);
+        $teacher->givePermissionTo(['view teacher']);
 
-        $student = Role::create((['name' => 'student']));
-        $student->givePermissionTo(('feedback'));
-        $student->givePermissionTo(('comment'));
+        $student = Role::create(['name' => 'student']);
+        $student->givePermissionTo(['feedback']);
+        $student->givePermissionTo(['comment']);
+        $student->givePermissionTo(['view student']);
 
         $admin = User::factory()->create([
             'name' => 'Admin User',
@@ -59,7 +64,5 @@ class PermissionsSeeder extends Seeder
         ]);
 
         $admin->assignRole($superAdminRole);
-
-
     }
 }

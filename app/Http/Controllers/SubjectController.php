@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subjects;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
@@ -21,14 +22,26 @@ class SubjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function create(){
-        return view('subjects.subjectsRegister');
+    public function create()
+    {
+
+        $teachers = User::where([['role_id', '=', '2']])->get();
+        $professors = [];
+
+
+        foreach ($teachers as $teacher) {
+            if (!$teacher->subjectAsParticipant) {
+                array_push($professors, $teacher);
+            }
+        }
+
+        return view('subjects.subjectsRegister', ['users' => $professors]);
     }
     public function store(Request $request)
     {
         $subject = new Subjects;
-        $subject -> name = $request -> name;
-        $subject ->user_id = auth()->user()->id;
+        $subject->name = $request->name;
+        $subject->user_id = $request->user_id;
 
         $subject->save();
 

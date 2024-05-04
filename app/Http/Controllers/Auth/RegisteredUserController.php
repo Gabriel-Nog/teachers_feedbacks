@@ -8,12 +8,11 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -41,6 +40,8 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $role = Role::findOrFail($request->role_id);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -48,8 +49,9 @@ class RegisteredUserController extends Controller
             'cpf' => $request->cpf,
             'role_id' => $request->role_id,
             'password' => Hash::make($request->password),
-            'remember_token' => Str::random(10),
         ]);
+
+        $user->assignRole($role);
 
         event(new Registered($user));
 

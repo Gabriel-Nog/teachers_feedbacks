@@ -19,8 +19,6 @@ class ClassesSeeder extends Seeder
                 'name' => 'Turma 1',
                 'shift' => 'manha',
                 'year' => '2024',
-                'subjects_id' => '1',
-                'user_id' => '1'
             ],
            
         ];

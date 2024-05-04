@@ -47,19 +47,17 @@ class UserController extends Controller
         $users = User::all('*');
         $classes = Classes::all('*');
         $subjects = Subjects::all();
-        $teachers = [];
-        $students = [];
-        foreach ($users as $user) {
-            if ($user->userRole) {
-                if ($user->userRole->name == 'teacher') {
-                    array_push($teachers, $user);
-                }
-                if ($user->userRole->name == 'student') {
-                    array_push($students, $user);
-                }
-            }
+        $teachers = $users->filter(function ($user) {
+            $roles = $user->roles;
+            return $roles->count() > 0 && $roles->contains('teacher');
+        });
+        $students = $users->filter(function ($user) {
+            $roles = $user->roles;
+            return $roles->count() > 0 && $roles->contains('student');
+        });
 
-        }
+        dd($teachers, $students);
+
         return view('dashboard', ['teachers' => $teachers, 'students' => $students, 'subjects' => $subjects, 'classes' => $classes]);
     }
 

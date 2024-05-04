@@ -1,21 +1,24 @@
 @props(['data'])
-
-<div {{ $attributes->merge(['class' => 'max-w-8xl mx-auto sm:px-6 lg:px-8 grid grid-cols-2 gap-5']) }}>
-    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg col-start-1 col-end-1">
+<div {{ $attributes->merge(['class' => 'max-w-8xl mx-auto sm:px-6 lg:px-8 flex gap-5']) }}>
+    <div class="w-full bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         @php
             $isEmpty =
                 request('type') != 'students' && request('type') != 'teachers' && request('type') != 'classes'
                     ? true
                     : false;
         @endphp
-        <div class="p-3 text-gray-900 dark:text-gray-100">
+        <div class="w-full p-3 text-gray-900 dark:text-gray-100">
             <x-table>
                 @if (request('type') == 'teachers' || request('type') == 'students' || request('type') != 'classes')
                     <x-table-head>
                         <x-t-row>
                             <x-t-head>{{ __('Name') }}</x-t-head>
                             <x-t-head>{{ __('E-mail') }}</x-t-head>
-                            <x-t-head>{{ __('Role') }}</x-t-head>
+                            @if (request('type') == 'teachers')
+                                <x-t-head>{{ __('Subject') }}</x-t-head>
+                            @else
+                                <x-t-head>{{ __('Role') }}</x-t-head>
+                            @endif
                             <x-t-head>{{ __('Actions') }}</x-t-head>
                         </x-t-row>
                     </x-table-head>
@@ -36,7 +39,11 @@
                             <x-t-row>
                                 <x-t-data>{{ $user->name }}</x-t-data>
                                 <x-t-data>{{ $user->email }}</x-t-data>
-                                <x-t-data class="uppercase">{{ $user->userRole->name }}</x-t-data>
+                                @if ($user->subjectAsParticipant)
+                                    <x-t-data>{{ $user->subjectAsParticipant->name }}</x-t-data>
+                                @else
+                                    <x-t-data>{{ __('N/A') }}</x-t-data>
+                                @endif
                                 <x-t-data>{{ __('') }}</x-t-data>
                             </x-t-row>
                         @endforeach
@@ -46,7 +53,7 @@
                             <x-t-row>
                                 <x-t-data>{{ $user->name }}</x-t-data>
                                 <x-t-data>{{ $user->email }}</x-t-data>
-                                <x-t-data class="uppercase">{{ $user->userRole->name }}</x-t-data>
+                                <x-t-data class="uppercase">{{ $user->roles[0]->name }}</x-t-data>
                                 <x-t-data>{{ __('') }}</x-t-data>
                             </x-t-row>
                         @endforeach
@@ -65,28 +72,35 @@
             </x-table>
         </div>
     </div>
-    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg col-start-2 col-end-2">
-        <div class="p-3 text-gray-900 dark:text-gray-100">
-            <x-table>
-                <x-table-head>
-                    <x-t-row>
-                        <x-t-head>{{ __('Subject') }}</x-t-head>
-                        <x-t-head>{{ __('') }}</x-t-head>
-                        <x-t-head>{{ __('Created at') }}</x-t-head>
-                        <x-t-head>{{ __('Actions') }}</x-t-head>
-                    </x-t-row>
-                </x-table-head>
-                <x-table-body>
-                    @foreach ($data['subjects'] as $subject)
+    @can('view all' || 'view teacher')
+        <div class="w-full bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-3 text-gray-900 dark:text-gray-100">
+                <x-table>
+                    <x-table-head>
                         <x-t-row>
-                            <x-t-data>{{ $subject->name }}</x-t-data>
-                            <x-t-data>{{ __('') }}</x-t-data>
-                            <x-t-data>{{ $subject->created_at }}</x-t-data>
-                            <x-t-data>{{ __('') }}</x-t-data>
+                            <x-t-head>{{ __('Subject') }}</x-t-head>
+                            <x-t-head>{{ __('Teacher') }}</x-t-head>
+                            <x-t-head>{{ __('Created at') }}</x-t-head>
+                            <x-t-head>{{ __('Actions') }}</x-t-head>
                         </x-t-row>
-                    @endforeach
-                </x-table-body>
-            </x-table>
+                    </x-table-head>
+                    <x-table-body>
+                        @foreach ($data['subjects'] as $subject)
+                            <x-t-row>
+                                <x-t-data>{{ $subject->name }}</x-t-data>
+                                @if ($subject->user)
+                                    <x-t-data>{{ $subject->user->name }}</x-t-data>
+                                @else
+                                    <x-t-data>{{ __('N/A') }}</x-t-data>
+                                @endif
+                                <x-t-data>{{ $subject->created_at }}</x-t-data>
+                                <x-t-data>{{ __('') }}</x-t-data>
+                            </x-t-row>
+                        @endforeach
+                    </x-table-body>
+                </x-table>
+            </div>
         </div>
-    </div>
+    @endcan
+
 </div>

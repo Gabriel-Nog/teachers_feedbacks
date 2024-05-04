@@ -13,7 +13,8 @@ class Subjects extends Model
         'user_id',
         'nome'
     ];
-    public function user(){
-        return $this->belongsTo('App\Models\User');
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id');
     }
 }

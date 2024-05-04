@@ -55,11 +55,6 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Student');
     }
 
-    public function userRole()
-    {
-        return $this->hasOne('App\Models\Role', 'id');
-    }
-
     public function classeAsParticipant()
     {
         return $this->hasOne('App\Models\Classes', 'user_id');
@@ -68,7 +63,7 @@ class User extends Authenticatable
 
     public function subjectAsParticipant()
     {
-        return $this->hasOne('App\Models\Classes');
+        return $this->hasOne('App\Models\Subjects', 'user_id');
     }
 
     public function studentAsFeedback()

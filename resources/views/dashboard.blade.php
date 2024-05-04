@@ -7,6 +7,11 @@
 
     <div class="py-12">
         <x-tables-navbar class="mx-8"></x-tables-navbar>
-        <x-admin-table :data="['teachers' => $teachers, 'students' => $students, 'subjects' => $subjects, 'classes' => $classes]"></x-admin-table>
+        <x-dashboard-table :data="[
+            'teachers' => $teachers,
+            'students' => $students,
+            'subjects' => $subjects,
+            'classes' => $classes,
+        ]"></x-dashboard-table>
     </div>
 </x-app-layout>
