@@ -47,7 +47,49 @@
                                 <x-t-data>{{ $user->name }}</x-t-data>
                                 <x-t-data>{{ $user->email }}</x-t-data>
                                 <x-t-data class="uppercase">{{ $user->userRole->name }}</x-t-data>
-                                <x-t-data>{{ __('') }}</x-t-data>
+                                <x-t-data>
+                                <x-nav-link
+                                x-data=""
+                                x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+                                >{{ __('Feedback') }}</x-nav-link>
+
+                                <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                    <form method="POST" action="" class="p-6">
+                                        @csrf
+                                        @method('create')
+                            
+                                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Avalie seu professor') }}
+                                        </h2>
+                            
+                                        <x-sucess-button class="p-6 mt-3">Like</x-sucess-button>
+                                        <x-danger-button class="p-6 mt-3 ml-3">Deslike</x-danger-button>
+                                        <div class="mt-6">
+                                            <x-input-label for="comment" value="{{ __('Comentário') }}"/>
+                            
+                                            <x-text-area
+                                                id="comment"
+                                                name="comment"
+                                                type="comment"
+                                                class="mt-1 auto w-5/6"
+                                            />
+                            
+                                            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                        </div>
+                            
+                                        <div class="mt-6 flex justify-end">
+                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('Cancelar') }}
+                                            </x-secondary-button>
+                            
+                                            <x-primary-button class="ms-3">
+                                                {{ __('Enviar') }}
+                                            </x-primary-button>
+                                        </div>
+                                    </form>
+                                </x-modal>
+                                </x-t-data>
+                                
                             </x-t-row>
                         @endforeach
                     @endif
@@ -58,6 +100,7 @@
                                 <x-t-data>{{ $class->year }}</x-t-data>
                                 <x-t-data class="uppercase">{{ $class->shift }}</x-t-data>
                                 <x-t-data>{{ __('') }}</x-t-data>
+
                             </x-t-row>
                         @endforeach
                     @endif
