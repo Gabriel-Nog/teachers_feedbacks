@@ -35,9 +35,9 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'cpf'  => ['required', 'string', 'max:20', 'unique:'.User::class],
-            'roles_id' => ['required', 'int'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'cpf' => ['required', 'string', 'max:20', 'unique:' . User::class],
+            'role_id' => ['required', 'int'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'email_verified_at' => now(),
             'cpf' => $request->cpf,
-            'roles_id' => $request->roles_id,
+            'role_id' => $request->role_id,
             'password' => Hash::make($request->password),
             'remember_token' => Str::random(10),
         ]);

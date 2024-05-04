@@ -62,10 +62,10 @@ class UserController extends Controller
         }
         return view('dashboard', ['teachers' => $teachers, 'students' => $students, 'subjects' => $subjects, 'classes' => $classes]);
     }
-    
-    
-    
-        /**
+
+
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
