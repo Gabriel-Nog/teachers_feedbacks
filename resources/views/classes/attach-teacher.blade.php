@@ -24,7 +24,7 @@
                 name="classes_id" id="class">
                 <option disabled select>Selecione a turma</option>
                 @foreach ($classes as $class)
-                @if ($user->classeAsParticipant && $user->classeAsParticipant->first()->id == $class->id)
+                @if ($user->classeAsParticipant->count() > 0 && $user->classeAsParticipant->first()->id == $class->id)
                         <option value="{{ $class->id }}" selected>{{ $class->name }}</option>
                     @else
                         <option value="{{ $class->id }}">{{ $class->name }}</option>

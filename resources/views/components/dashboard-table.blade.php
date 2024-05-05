@@ -86,6 +86,7 @@
                                 <x-t-head>{{ __('Nome') }}</x-t-head>
                                 <x-t-head>{{ __('E-mail') }}</x-t-head>
                                 <x-t-head>{{ __('Disciplina') }}</x-t-head>
+                                <x-t-head>{{ __('Turma') }}</x-t-head>
                                 <x-t-head>{{ __('Ações') }}</x-t-head>
                             </x-t-row>
                         @else
@@ -102,6 +103,7 @@
                                 <x-t-head>{{ __('Nome') }}</x-t-head>
                                 <x-t-head>{{ __('E-mail') }}</x-t-head>
                                 <x-t-head>{{ __('Disciplina') }}</x-t-head>
+                                <x-t-head>{{ __('Turma') }}</x-t-head>
                                 <x-t-head>{{ __('Ações') }}</x-t-head>
                             </x-t-row>
                         @else
@@ -153,8 +155,14 @@
                                 @else
                                 <x-t-data>{{__('N/A')}}</x-t-data>
                             @endif
+                            @if($user->classeAsParticipant->count() > 0)
                             <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
-                            @if (Auth::user()->roles[0]->name == 'student')
+                            @else
+                            <x-t-data>{{__('N/A')}}</x-t-data>
+                        @endif
+                          
+                        @if (Auth::user()->roles[0]->name == 'student')
+                            @if(Auth::user()->studentFeedback)
                             <x-t-data>
                                 <x-nav-link x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'feedback-modal-{{ $user->id }}')">{{ __('Feedback') }}</x-nav-link>
@@ -208,6 +216,9 @@
                                     </form>
                                 </x-modal>
                             </x-t-data>
+                            @else
+                             <x-t-data>{{__('Feedback enviado!')}}</x-t-data>
+                            @endif
                             @endif
                             @if (Auth::user()->roles[0]->name == 'super-admin')
                                 <x-t-data>
@@ -227,11 +238,16 @@
                     @endforeach
                 @endif
                 @if (request('type') == 'students' || $isEmpty)
+                
                     @foreach ($allStudents as $user)
                         <x-t-row>
                             <x-t-data>{{ $user->name }}</x-t-data>
                             <x-t-data>{{ $user->email }}</x-t-data>
+                            @if($user->classeAsParticipant->count() > 0)
                             <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
+                            @else
+                            <x-t-data>{{__('N/A')}}</x-t-data>
+                        @endif
                             @if (Auth::user()->roles[0]->name == 'super-admin')
                                 <x-t-data>
                                     <a href="{{ route('classes.student', $user->id) }}"

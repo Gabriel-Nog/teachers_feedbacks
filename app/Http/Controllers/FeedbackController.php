@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
@@ -53,6 +54,7 @@ class FeedbackController extends Controller
         $feedback[$fieldRemove] = 0;
         $feedback['comment'] = $request->comment;
         $feedback['user_id'] = $request->teacher_id;
+        $feedback['user_email'] = Auth::user()->email;
         $feedback->save();
 
         return redirect()

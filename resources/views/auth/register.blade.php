@@ -28,7 +28,7 @@
 
         <!-- Password -->
         <div class=col-start-1 col-end-1">
-            <x-input-label for="password" :value="__('Password')" />
+            <x-input-label for="password" :value="__('Senha')" />
 
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
                 autocomplete="new-password" />
@@ -38,7 +38,7 @@
 
         <!-- Confirm Password -->
         <div class=col-start-2 col-end-2">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <x-input-label for="password_confirmation" :value="__('Confirme sua senha')" />
 
             <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
                 name="password_confirmation" required autocomplete="new-password" />
