@@ -41,7 +41,13 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::with(['professorAsFeedback', 'classeAsParticipant'])->where('id', $id)->first();
+        // $likes = $user->professorAsFeedback->where('like', '>=', 1)->count();
+        // $unlikes = $user->professorAsFeedback->where('dislike', '>=', 1)->count();
+        $classesUser = ClassesUser::where('user_id', $user->id)->get();
+        // , 'likes' => $likes, 'unlikes' => $unlikes
+
+        return view('classes.view-classes', ['user' => $user, 'classesUser' => $classesUser]);
     }
 
     public function showAll()

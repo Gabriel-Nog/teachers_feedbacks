@@ -10,7 +10,8 @@ class ClassesUser extends Model
 
     protected $fillable = [
         'user_id',
-        'classes_id'
+        'classes_id',
+        'subject'
     ];
 
     public $timestamps = false;

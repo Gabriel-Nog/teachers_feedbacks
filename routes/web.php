@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');
+    Route::get('teachers/{id}/classes', [UserController::class, 'show'])->name('classes.view-classes');
     Route::post('teacher/{id}/attach', [SubjectController::class, 'update'])->name('classes.attach-teachers');
 
     Route::get('students/{id}/attach', [UserController::class, 'index'])->name('classes.student');

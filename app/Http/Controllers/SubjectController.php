@@ -80,9 +80,13 @@ class SubjectController extends Controller
     public function update(Request $request, string $id)
     {
 
+
+        $subject = Subjects::where('id', $request->subjects_id)->get();
+
         $classesUser = ClassesUser::create([
             'user_id' => $id,
-            'classes_id' => $request->classes_id
+            'classes_id' => $request->classes_id,
+            'subject' => $subject->first()->name
         ]);
 
         $subjectsUser = SubjectsUser::create([

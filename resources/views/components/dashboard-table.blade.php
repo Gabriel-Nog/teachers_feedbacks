@@ -16,10 +16,10 @@
             $allTeachers = $data['teachers'];
             $allStudents = $data['students'];
             $subjectsUser = $data['subjectsUser'];
-
             if (Auth::user()->roles[0]->name == 'teacher') {
                 $allSubjects = Auth::user()->subjectAsParticipant;
                 $allTeachers = [Auth::user()];
+                $allClasses = Auth::user()->classeAsParticipant;
             }
 
             if (Auth::user()->roles[0]->name == 'teacher' || Auth::user()->roles[0]->name == 'student') {
@@ -48,15 +48,42 @@
                 $classesUser = $data['classesUser']->filter(function ($class) use ($allClasses) {
                     return $allClasses->first()->id == $class->classes_id;
                 });
+                // dd($classesUser, $subjectsUser);
 
                 $teachers = [];
-                foreach ($allTeachers as $t) {
+                $subjects = [];
+                $teachersWithSubject = [];
+                foreach ($allSubjects as $s) {
                     foreach ($classesUser as $c) {
-                        if ($c->user_id == $t->id) {
+                        if ($c->subject == $s->name) {
+                            array_push($subjects, $s);
+                        }
+                    }
+                }
+                foreach ($subjectsUser as $su) {
+                    foreach ($subjects as $s) {
+                        if ($teachersWithSubject) {
+                            foreach ($teachersWithSubject as $ts) {
+                                if ($s->id == $su->subjects_id && !$ts->where('subjects_id', $s->id)) {
+                                    array_push($teachersWithSubject, $su);
+                                }
+                            }
+                        } else {
+                            if ($s->id == $su->subjects_id) {
+                                array_push($teachersWithSubject, $su);
+                            }
+                        }
+                    }
+                }
+
+                foreach ($teachersWithSubject as $ts) {
+                    foreach ($allTeachers as $t) {
+                        if ($ts->user_id == $t->id) {
                             array_push($teachers, $t);
                         }
                     }
                 }
+
                 $allTeachers = collect($teachers);
 
                 $subjectsU = [];
@@ -76,7 +103,6 @@
                     ? true
                     : false;
         @endphp
-        {{-- <div class="w-full p-3 text-gray-900 dark:text-gray-100"> --}}
         <x-table>
             @if (request('type') == 'teachers' || request('type') == 'students' || request('type') != 'classes')
                 <x-table-head>
@@ -86,6 +112,7 @@
                                 <x-t-head>{{ __('Nome') }}</x-t-head>
                                 <x-t-head>{{ __('E-mail') }}</x-t-head>
                                 <x-t-head>{{ __('Disciplina') }}</x-t-head>
+                                <x-t-head>{{ __('Turmas') }}</x-t-head>
                                 <x-t-head>{{ __('Ações') }}</x-t-head>
                             </x-t-row>
                         @else
@@ -102,6 +129,7 @@
                                 <x-t-head>{{ __('Nome') }}</x-t-head>
                                 <x-t-head>{{ __('E-mail') }}</x-t-head>
                                 <x-t-head>{{ __('Disciplina') }}</x-t-head>
+                                <x-t-head>{{ __('Turma') }}</x-t-head>
                                 <x-t-head>{{ __('Ações') }}</x-t-head>
                             </x-t-row>
                         @else
@@ -137,7 +165,6 @@
                         <x-t-head>{{ __('Turma') }}</x-t-head>
                         <x-t-head>{{ __('Ano') }}</x-t-head>
                         <x-t-head>{{ __('Turno') }}</x-t-head>
-                        <x-t-head>{{ __('Ações') }}</x-t-head>
                     </x-t-row>
                 </x-table-head>
             @endif
@@ -148,8 +175,20 @@
                         <x-t-row>
                             <x-t-data>{{ $user->name }}</x-t-data>
                             <x-t-data>{{ $user->email }}</x-t-data>
-                            <x-t-data>{{ $user->subjectAsParticipant->first()->name }}</x-t-data>
-                            <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
+                            @if ($user->subjectAsParticipant->count() > 0)
+                                <x-t-data>{{ $user->subjectAsParticipant->first()->name }}</x-t-data>
+                            @else
+                                <x-t-data>{{ __('N/A') }}</x-t-data>
+                            @endif
+                            @if ($user->classeAsParticipant->count() > 0)
+                                <x-t-data>
+                                    <a href="{{ route('classes.view-classes', $user->id) }}"
+                                        class="text-gray-500 hover:underline">Ver turmas</a>
+                                </x-t-data>
+                            @else
+                                <x-t-data>{{ __('N/A') }}</x-t-data>
+                            @endif
+
                             @if (Auth::user()->roles[0]->name == 'student')
                                 <x-t-data>
                                     <x-nav-link x-data=""
@@ -220,7 +259,11 @@
                         <x-t-row>
                             <x-t-data>{{ $user->name }}</x-t-data>
                             <x-t-data>{{ $user->email }}</x-t-data>
-                            <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
+                            @if ($user->classeAsParticipant->count() > 0)
+                                <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
+                            @else
+                                <x-t-data>{{ __('N/A') }}</x-t-data>
+                            @endif
                             @if (Auth::user()->roles[0]->name == 'super-admin')
                                 <x-t-data>
                                     <a href="{{ route('classes.student', $user->id) }}"
@@ -236,13 +279,10 @@
                             <x-t-data>{{ $class->name }}</x-t-data>
                             <x-t-data>{{ $class->year }}</x-t-data>
                             <x-t-data class="uppercase">{{ $class->shift }}</x-t-data>
-                            <x-t-data>{{ __('N/A') }}</x-t-data>
-
                         </x-t-row>
                     @endforeach
                 @endif
             </x-table-body>
         </x-table>
-        {{-- </div> --}}
     </div>
 </div>
