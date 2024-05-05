@@ -31,6 +31,7 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'attach subject']);
         Permission::create(['name' => 'create class']);
         Permission::create(['name' => 'create subject']);
+        Permission::create(['name'=> 'view feedback']);
 
 
         $superAdminRole = Role::create(['name' => 'super-admin']);
@@ -42,6 +43,7 @@ class PermissionsSeeder extends Seeder
         $superAdminRole->givePermissionTo(['attach subject']);
 
         $teacher = Role::create(['name' => 'teacher']);
+        $teacher->givePermissionTo(['view feedback']);
 
         $student = Role::create(['name' => 'student']);
         $student->givePermissionTo(['feedback']);

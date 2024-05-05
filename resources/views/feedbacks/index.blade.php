@@ -27,7 +27,7 @@
                         style="{{ $feedback->like > 0 ? 'color: #0f8' : 'color: #f03; tranform: rotate(.5turn);' }}"
                         title="like"></iconify-icon>
 
-                    {{ $feedback->like > 0 ? 'Liked! ^_^' : 'Unliked! ;(' }}
+                    {{ $feedback->like > 0 ? 'Liked!' : 'Desliked!' }}
                 </div>
 
                 <p class="text-gray-400 mb-4">{{ $feedback->comment }}</p>

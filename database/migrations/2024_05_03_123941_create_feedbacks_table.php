@@ -17,7 +17,12 @@ return new class extends Migration
             $table->integer('dislike');
             $table->text('comment');
             $table->foreignId('user_id');
+            $table->string('user_email')->nullable();
             $table->timestamps();
+            $table->foreign('user_email')
+            ->references('email')
+            ->on('users')
+            ->onDelete('cascade');
         });
     }
 

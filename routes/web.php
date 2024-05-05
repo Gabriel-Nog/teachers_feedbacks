@@ -23,16 +23,26 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [UserController::class, 'showAll'])->name('dashboard');
-    Route::group(['middleware' => ['can:create student']], function () {
-        Route::get('/subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
-        Route::post('/subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
-        Route::get('/classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
-        Route::post('/classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+    Route::middleware('auth')->group(function () {
+        Route::get('/dashboard', [UserController::class, 'showAll'])->name('dashboard');
+        Route::group(['middleware' => ['can:create student']], function () {
+            Route::get('/subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
+            Route::post('/subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
+            Route::get('/classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
+            Route::post('/classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+            Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');
+            Route::post('teacher/{id}/attach', [SubjectController::class, 'update'])->name('classes.attach-teachers');
+            Route::get('students/{id}/attach', [UserController::class, 'index'])->name('classes.student');
+            Route::post('student/{id}/attach', [UserController::class, 'update'])->name('classes.students');
+        });
+    
+    Route::group(['middleware' => ['can:feedback']], function(){
+        Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedbacks.store');
     });
-    Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedbacks.store');
-    Route::get('teachers/{id}/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+
+    Route::group(['middleware' => ['can:view feedback']], function(){
+        Route::get('teachers/{id}/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+    });
 
 
     Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');

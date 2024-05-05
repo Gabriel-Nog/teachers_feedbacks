@@ -20,4 +20,8 @@ class Feedback extends Model
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
+
+    public function student(){
+        return $this->hasOne('App\Models\User', 'email');
+    }
 }

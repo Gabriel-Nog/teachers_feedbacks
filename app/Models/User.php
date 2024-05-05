@@ -70,4 +70,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Feedback');
     }
+
+    public function studentFeedback()
+    {
+        return $this->hasOne(Feedback::class, 'user_email');
+    }
 }
