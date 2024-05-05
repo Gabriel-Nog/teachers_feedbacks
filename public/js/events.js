@@ -6,7 +6,7 @@ function openFilters() {
 function handleFeedbackAction(event) {
     const buttonClicked = event.currentTarget;
     const buttons = buttonClicked?.parentNode?.children ?? [];
-    const feedbackAction = document.getElementById('feedback_action');
+    const feedbackAction = buttonClicked?.parentNode?.parentNode.querySelector('.feedback_action') ?? null;
     const allowedActions = ['like', 'dislike'];
 
     if ([buttonClicked, allowedActions.includes(buttonClicked.dataset.action), feedbackAction, buttons].some(verify => !!!verify)) return;
@@ -19,4 +19,6 @@ function handleFeedbackAction(event) {
 
     buttonClicked.style.opacity = "1";
     feedbackAction.value = action;
+
+
 }

@@ -108,9 +108,9 @@
                                 @if (Auth::user()->roles[0]->name == 'student')
                                     <x-t-data>
                                         <x-nav-link x-data=""
-                                            x-on:click.prevent="$dispatch('open-modal', 'feedback-modal')">{{ __('Feedback') }}</x-nav-link>
+                                            x-on:click.prevent="$dispatch('open-modal', 'feedback-modal-{{$user->id}}')">{{ __('Feedback') }}</x-nav-link>
 
-                                        <x-modal name="feedback-modal" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                        <x-modal name="feedback-modal-{{$user->id}}" :show="$errors->userDeletion->isNotEmpty()" focusable>
                                             <form method="POST" action="{{ route('feedbacks.store') }}" class="p-6">
                                                 @csrf
                                                 @method('POST')
@@ -128,7 +128,7 @@
                                                         onclick="handleFeedbackAction(event)">Deslike</x-danger-button>
                                                 </div>
 
-                                                <input type="hidden" name="feedback_action" id="feedback_action" />
+                                                <input type="hidden" name="feedback_action" class="feedback_action" />
                                                 <input type="hidden" name="teacher_id" value="{{ $user->id }}" />
 
                                                 <div class="mt-6">
