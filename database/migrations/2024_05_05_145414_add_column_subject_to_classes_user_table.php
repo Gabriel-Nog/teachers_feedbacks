@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('classes_user', function (Blueprint $table) {
-            $table->addColumn('text', 'subject')->nullable()->unique();
+            $table->addColumn('text', 'subject')->nullable();
         });
     }
 

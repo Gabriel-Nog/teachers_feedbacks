@@ -34,21 +34,38 @@ class ClassesController extends Controller
     public function store(Request $request)
     {
         $classes = new Classes;
-        $subjectsUser = SubjectsUser::where('subjects_id', $request->subjects_id)->get();
 
-        $classeId = $classes->insertGetId([
-            'name' => $request->name,
-            'shift' => $request->shift,
-            'year' => $request->year
-        ]);
-        ClassesUser::create([
-            'user_id' => $subjectsUser->first()->user_id,
-            'classes_id' => $classeId
-        ]);
+        if ($request->subjects_id) {
+            $subjectsUser = SubjectsUser::where('subjects_id', $request->subjects_id)->get()->first();
+            if ($subjectsUser == null) {
+                return redirect()->route('dashboard')
+                    ->withErrors(['error' => 'Não existe profesores para essa matéria!']);
+            } else {
+                $subject = Subjects::where('id', $request->subjects_id)->get()->first();
 
-        return redirect()
-            ->route('dashboard')
-            ->with('msg', 'Turma Criada Com Sucesso!');
+                $classeId = $classes->insertGetId([
+                    'name' => $request->name,
+                    'shift' => $request->shift,
+                    'year' => $request->year
+                ]);
+
+                ClassesUser::create([
+                    'user_id' => $subjectsUser->user_id,
+                    'classes_id' => $classeId,
+                    'subject' => $subject->name
+                ]);
+
+
+            }
+
+        }
+
+
+        return redirect()->route('dashboard')
+            ->with('msg', 'Turma criada com sucesso!');
+
+
+
     }
 
     /**

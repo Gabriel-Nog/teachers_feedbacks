@@ -46,10 +46,10 @@ class SubjectController extends Controller
         ]);
 
 
-        SubjectsUser::create([
-            'user_id' => $request->user_id,
-            'subjects_id' => $subjectId
-        ]);
+        // SubjectsUser::create([
+        //     'user_id' => $request->user_id,
+        //     'subjects_id' => $subjectId
+        // ]);
 
         return redirect()
             ->route('dashboard')
@@ -83,19 +83,22 @@ class SubjectController extends Controller
 
         $subject = Subjects::where('id', $request->subjects_id)->get();
 
-        $classesUser = ClassesUser::create([
-            'user_id' => $id,
-            'classes_id' => $request->classes_id,
-            'subject' => $subject->first()->name
-        ]);
+        if ($request->classes_id) {
+            $classesUser = ClassesUser::create([
+                'user_id' => $id,
+                'classes_id' => $request->classes_id,
+                'subject' => $subject->first()->name
+            ]);
+        }
 
-        $subjectsUser = SubjectsUser::create([
-            'user_id' => $id,
-            'subjects_id' => $request->subjects_id
-        ]);
+        if ($request->subjects_id) {
+            $subjectsUser = SubjectsUser::create([
+                'user_id' => $id,
+                'subjects_id' => $request->subjects_id
+            ]);
+        }
 
-
-        return redirect('/dashboard')->with('Usuário anexado com sucesso!');
+        return redirect()->route('dashboard')->with('Usuário anexado com sucesso!');
     }
 
     /**
