@@ -9,7 +9,11 @@
                 name="subjects_id" id="subjects">
                 <option disabled select>Selecione a disciplina</option>
                 @foreach ($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                    @if ($user->subjectAsParticipant && $user->subjectAsParticipant->first()->id == $subject->id)
+                        <option value="{{ $subject->id }}" selected>{{ $subject->name }}</option>
+                    @else
+                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                    @endif
                 @endforeach
             </select>
         </div>
@@ -20,7 +24,11 @@
                 name="classes_id" id="class">
                 <option disabled select>Selecione a turma</option>
                 @foreach ($classes as $class)
-                    <option value="{{ $class->id }}">{{ $class->name }}</option>
+                @if ($user->classeAsParticipant && $user->classeAsParticipant->first()->id == $class->id)
+                        <option value="{{ $class->id }}" selected>{{ $class->name }}</option>
+                    @else
+                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    @endif
                 @endforeach
             </select>
         </div>

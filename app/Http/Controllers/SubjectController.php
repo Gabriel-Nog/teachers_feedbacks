@@ -18,7 +18,9 @@ class SubjectController extends Controller
     {
         $classes = Classes::all();
         $subjects = Subjects::all();
-        return view('classes.attach-teacher', ['id' => $id, 'subjects' => $subjects, 'classes' => $classes]);
+        $user = User::where('id', $id)->with(['subjectAsParticipant', 'classeAsParticipant']);
+
+        return view('classes.attach-teacher', ['id' => $id, 'subjects' => $subjects, 'classes' => $classes, 'user' => $user->first()]);
     }
 
     /**
@@ -42,6 +44,7 @@ class SubjectController extends Controller
         $subjectId = $subject->insertGetId([
             'name' => $request->name
         ]);
+
 
         SubjectsUser::create([
             'user_id' => $request->user_id,
@@ -76,9 +79,15 @@ class SubjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $classesUser = ClassesUser::create([
             'user_id' => $id,
             'classes_id' => $request->classes_id
+        ]);
+
+        $subjectsUser = SubjectsUser::create([
+            'user_id' => $id,
+            'subjects_id' => $request->subjects_id
         ]);
 
 

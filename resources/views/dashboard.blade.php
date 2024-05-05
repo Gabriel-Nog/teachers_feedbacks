@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="w-full py-12">
         <x-tables-navbar class="mx-8"></x-tables-navbar>
         <x-dashboard-table :data="[
             'teachers' => $teachers,
