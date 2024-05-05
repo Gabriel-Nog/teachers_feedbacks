@@ -147,56 +147,67 @@
                     @foreach ($allTeachers as $user)
                         <x-t-row>
                             <x-t-data>{{ $user->name }}</x-t-data>
-                            <x-t-data>{{ $user->email }}</x-t-data>
-                            <x-t-data>{{ $user->subjectAsParticipant->first()->name }}</x-t-data>
+                            <x-t-data>{{ $user->email }}</x-t-data>         
+                            @if($user->subjectAsParticipant->count() > 0)
+                                <x-t-data>{{ $user->subjectAsParticipant->first()->name }}</x-t-data>
+                                @else
+                                <x-t-data>{{__('N/A')}}</x-t-data>
+                            @endif
                             <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
                             @if (Auth::user()->roles[0]->name == 'student')
-                                <x-t-data>
-                                    <x-nav-link x-data=""
-                                        x-on:click.prevent="$dispatch('open-modal', 'feedback-modal-{{ $user->id }}')">{{ __('Feedback') }}</x-nav-link>
+                            <x-t-data>
+                                <x-nav-link x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'feedback-modal-{{ $user->id }}')">{{ __('Feedback') }}</x-nav-link>
 
-                                    <x-modal name="feedback-modal-{{ $user->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                        <form method="POST" action="{{ route('feedbacks.store') }}" class="p-6">
-                                            @csrf
-                                            @method('POST')
+                                <x-modal name="feedback-modal-{{ $user->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                    <form method="POST" action="{{ route('feedbacks.store') }}" class="p-6">
+                                        @csrf
+                                        @method('POST')
 
-                                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                                {{ __('Avalie seu professor') }}
-                                            </h2>
+                                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                            {{__('Avaliando: '.$user->subjectAsParticipant->first()->name.' > '.$user->name )}}
 
-                                            <div>
-                                                <x-sucess-button class="active" type="button" class="p-6 mt-3"
-                                                    data-action="like" onclick="handleFeedbackAction(event)">Like
-                                                </x-sucess-button>
-                                                <x-danger-button type="button" class="p-6 mt-3 ml-3"
-                                                    data-action="dislike"
-                                                    onclick="handleFeedbackAction(event)">Deslike</x-danger-button>
-                                            </div>
+                                        </h2>
 
-                                            <input type="hidden" name="feedback_action" class="feedback_action" />
-                                            <input type="hidden" name="teacher_id" value="{{ $user->id }}" />
+                                        <div>
+                                            <x-sucess-button class="active" type="button" class="p-6 mt-3 mr-2"
+                                                data-action="like" onclick="handleFeedbackAction(event)">
+                                                <div class="flex items-center gap-2">
+                                                    <iconify-icon icon="mdi:like-outline" width="28" height="28" style="color: #fff"
+                                                        title="like"></iconify-icon>
+                                            </x-sucess-button>
+                                            <x-danger-button type="button" class="p-6 mt-3 ml-3"
+                                                data-action="dislike"
+                                                onclick="handleFeedbackAction(event)">
+                                                <iconify-icon icon="mdi:like-outline" width="28" height="28"
+                                                style="color: #fff; transform: rotate(.5turn);" title="unlike"></iconify-icon>
+                                            </x-danger-button>
+                                        </div>
 
-                                            <div class="mt-6">
-                                                <x-input-label for="comment" value="{{ __('Comentário') }}" />
+                                        <input type="hidden" name="feedback_action" class="feedback_action" />
+                                        <input type="hidden" name="teacher_id" value="{{ $user->id }}" />
 
-                                                <x-text-area id="comment" name="comment" type="comment"
-                                                    class="mt-1 auto w-5/6" />
+                                        <div class="mt-6">
+                                            <x-input-label for="comment" value="{{ __('Comentário') }}" />
 
-                                                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-                                            </div>
+                                            <x-text-area id="comment" name="comment" type="comment"
+                                                class="mt-1 auto w-5/6" />
 
-                                            <div class="mt-6 flex justify-end">
-                                                <x-secondary-button x-on:click="$dispatch('close')">
-                                                    {{ __('Cancelar') }}
-                                                </x-secondary-button>
+                                            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                        </div>
 
-                                                <x-primary-button class="ms-3">
-                                                    {{ __('Enviar') }}
-                                                </x-primary-button>
-                                            </div>
-                                        </form>
-                                    </x-modal>
-                                </x-t-data>
+                                        <div class="mt-6 flex justify-end">
+                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('Cancelar') }}
+                                            </x-secondary-button>
+
+                                            <x-primary-button class="ms-3">
+                                                {{ __('Enviar') }}
+                                            </x-primary-button>
+                                        </div>
+                                    </form>
+                                </x-modal>
+                            </x-t-data>
                             @endif
                             @if (Auth::user()->roles[0]->name == 'super-admin')
                                 <x-t-data>

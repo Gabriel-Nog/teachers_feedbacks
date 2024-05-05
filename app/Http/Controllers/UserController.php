@@ -71,7 +71,7 @@ class UserController extends Controller
             'subjects' => $subjects,
             'classes' => $classes,
             'subjectsUser' => $subjectsUser,
-            'classesUser' => $classesUser
+            'classesUser' => $classesUser,
         ]);
     }
 

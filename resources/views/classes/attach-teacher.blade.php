@@ -9,7 +9,7 @@
                 name="subjects_id" id="subjects">
                 <option disabled select>Selecione a disciplina</option>
                 @foreach ($subjects as $subject)
-                    @if ($user->subjectAsParticipant && $user->subjectAsParticipant->first()->id == $subject->id)
+                    @if ($user->subjectAsParticipant->count() > 0 && $user->subjectAsParticipant->first()->id == $subject->id )
                         <option value="{{ $subject->id }}" selected>{{ $subject->name }}</option>
                     @else
                         <option value="{{ $subject->id }}">{{ $subject->name }}</option>
