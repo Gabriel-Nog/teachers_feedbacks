@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('password');
             $table->string('cpf')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->foreignId('class_id')->nullable();
             $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();

@@ -18,11 +18,6 @@ class Classes extends Model
     ];
     public function user()
     {
-        return $this->belongsToMany('App\Models\User', 'id');
-    }
-
-    public function subject()
-    {
-        return $this->hasOne('App\Models\Subjects');
+        return $this->belongsToMany(User::class);
     }
 }

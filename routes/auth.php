@@ -31,13 +31,10 @@ Route::post('reset-password', [NewPasswordController::class, 'store'])
     ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::group(['middleware' => ['can:create student']], function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
-
     Route::post('register', [RegisteredUserController::class, 'store']);
-
-  
 });
 
 Route::middleware('auth')->group(function () {

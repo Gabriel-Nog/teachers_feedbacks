@@ -12,6 +12,8 @@
             'students' => $students,
             'subjects' => $subjects,
             'classes' => $classes,
+            'subjectsUser' => $subjectsUser,
+            'classesUser' => $classesUser,
         ]"></x-dashboard-table>
     </div>
 </x-app-layout>

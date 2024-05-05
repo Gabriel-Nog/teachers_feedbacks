@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
+use App\Models\ClassesUser;
 use App\Models\Subjects;
+use App\Models\SubjectsUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,8 +14,11 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
+        $classes = Classes::all();
+        $subjects = Subjects::all();
+        return view('classes.attach-teacher', ['id' => $id, 'subjects' => $subjects, 'classes' => $classes]);
     }
 
     /**
@@ -26,24 +32,21 @@ class SubjectController extends Controller
     {
 
         $teachers = User::where([['role_id', '=', '2']])->get();
-        $professors = [];
 
-
-        foreach ($teachers as $teacher) {
-            if (!$teacher->subjectAsParticipant) {
-                array_push($professors, $teacher);
-            }
-        }
-
-        return view('subjects.subjectsRegister', ['users' => $professors]);
+        return view('subjects.subjectsRegister', ['users' => $teachers]);
     }
     public function store(Request $request)
     {
         $subject = new Subjects;
-        $subject->name = $request->name;
-        $subject->user_id = $request->user_id;
 
-        $subject->save();
+        $subjectId = $subject->insertGetId([
+            'name' => $request->name
+        ]);
+
+        SubjectsUser::create([
+            'user_id' => $request->user_id,
+            'subjects_id' => $subjectId
+        ]);
 
         return redirect()
             ->route('dashboard')
@@ -73,7 +76,13 @@ class SubjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $classesUser = ClassesUser::create([
+            'user_id' => $id,
+            'classes_id' => $request->classes_id
+        ]);
+
+
+        return redirect('/dashboard')->with('Usuário anexado com sucesso!');
     }
 
     /**

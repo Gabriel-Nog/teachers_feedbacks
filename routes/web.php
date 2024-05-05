@@ -25,11 +25,22 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [UserController::class, 'showAll'])->name('dashboard');
-    Route::get('/subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
-    Route::post('/subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
-    Route::get('/classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
-    Route::post('/classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+    Route::group(['middleware' => ['can:create student']], function () {
+        Route::get('/subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
+        Route::post('/subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
+        Route::get('/classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
+        Route::post('/classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+    });
     Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedbacks.store');
+    Route::get('teachers/{id}/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+
+
+    Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');
+    Route::post('teacher/{id}/attach', [SubjectController::class, 'update'])->name('classes.attach-teachers');
+
+    Route::get('students/{id}/attach', [UserController::class, 'index'])->name('classes.student');
+    Route::post('student/{id}/attach', [UserController::class, 'update'])->name('classes.students');
+        
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

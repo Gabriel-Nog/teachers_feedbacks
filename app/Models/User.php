@@ -57,18 +57,17 @@ class User extends Authenticatable
 
     public function classeAsParticipant()
     {
-        return $this->hasOne('App\Models\Classes', 'user_id');
+        return $this->belongsToMany(Classes::class);
     }
 
 
     public function subjectAsParticipant()
     {
-        return $this->hasOne('App\Models\Subjects', 'user_id');
+        return $this->belongsToMany(Subjects::class);
     }
 
-    public function studentAsFeedback()
+    public function professorAsFeedback()
     {
-        return $this->hasOne('App\Models\Feedback');
+        return $this->hasMany('App\Models\Feedback');
     }
-
 }

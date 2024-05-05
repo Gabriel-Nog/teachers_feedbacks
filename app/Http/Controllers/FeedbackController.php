@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
@@ -10,9 +11,13 @@ class FeedbackController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $user = User::with('professorAsFeedback')->where('id', $id)->first();
+        $likes = $user->professorAsFeedback->where('like', '>=', 1)->count();
+        $unlikes = $user->professorAsFeedback->where('dislike', '>=', 1)->count();
+
+        return view('feedbacks.index', ['user' => $user, 'likes' => $likes, 'unlikes' => $unlikes]);
     }
 
     /**
@@ -28,16 +33,30 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $feedback = new Feedback;
-        $feedback -> like = $request -> like;
-        $feedback ->deslike = $request ->deslike;
-        $feedback ->comment = $request ->comment;
+        $request->validate([
+            'feedback_action' => ['required', 'string', 'in:like,dislike'],
+            'comment' => ['required', 'string'],
+            'teacher_id' => ['required', 'int'],
+        ], ['feedback_action.in' => 'erro']);
 
+        $fields = collect(['like', 'dislike']);
+        $fieldAdded = $fields->filter(function ($field) use ($request) {
+            return $field === $request->feedback_action;
+        })->first();
+        $fieldRemove = $fields->filter(function ($field) use ($request) {
+            return $field !== $request->feedback_action;
+        })->first();
+
+        $feedback = new Feedback();
+
+        $feedback[$fieldAdded] = 1;
+        $feedback[$fieldRemove] = 0;
+        $feedback['comment'] = $request->comment;
+        $feedback['user_id'] = $request->teacher_id;
         $feedback->save();
 
         return redirect()
-            ->route('dashboard')
+            ->back()
             ->with('msg', 'Feedback Com Sucesso!');
     }
 

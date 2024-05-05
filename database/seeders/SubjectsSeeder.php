@@ -15,7 +15,6 @@ class SubjectsSeeder extends Seeder
     {
         $subjects = [
             [
-                'user_id' => '1',
                 'name' => 'Disciplina 1'
             ],
            

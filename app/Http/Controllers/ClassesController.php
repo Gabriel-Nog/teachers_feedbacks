@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassesUser;
+use App\Models\Subjects;
+use App\Models\SubjectsUser;
 use Illuminate\Http\Request;
 use App\Models\Classes;
 use Illuminate\Support\Facades\DB;
@@ -13,15 +16,16 @@ class ClassesController extends Controller
      */
     public function index()
     {
+
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    { 
+    {
         $subjects = DB::table('subjects')->get();
-        return view('classes.classesRegister', ['subjects'=> $subjects]);
+        return view('classes.classesRegister', ['subjects' => $subjects]);
     }
 
     /**
@@ -30,12 +34,17 @@ class ClassesController extends Controller
     public function store(Request $request)
     {
         $classes = new Classes;
-        $classes -> name = $request -> name;
-        $classes -> shift = $request -> shift;
-        $classes -> year = $request -> year;
-        $classes-> subjects_id = $request->subjects_id;
-        $classes ->user_id = auth()->user()->id;
-        $classes->save();
+        $subjectsUser = SubjectsUser::where('subjects_id', $request->subjects_id)->get();
+
+        $classeId = $classes->insertGetId([
+            'name' => $request->name,
+            'shift' => $request->shift,
+            'year' => $request->year
+        ]);
+        ClassesUser::create([
+            'user_id' => $subjectsUser->first()->user_id,
+            'classes_id' => $classeId
+        ]);
 
         return redirect()
             ->route('dashboard')

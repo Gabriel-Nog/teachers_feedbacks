@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Feedback extends Model
+class SubjectsUser extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'like',
-        'deslike',
-        'comment',
         'user_id',
+        'subjects_id'
     ];
 
-    protected $table = "feedbacks";
+    public $timestamps = false;
 
-    public function user(){
-        return $this->belongsTo('App\Models\User');
-    }
+    protected $table = 'subjects_user';
 }
