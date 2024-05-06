@@ -26,36 +26,43 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [UserController::class, 'showAll'])->name('dashboard');
         Route::group(['middleware' => ['can:create student']], function () {
+            // Disciplinas
             Route::get('/subjectsRegister/create', [SubjectController::class, 'create'])->name('subjects.subjectsRegister');
             Route::post('/subjectsRegister/store', [SubjectController::class, 'store'])->name('subjects.subjectsRegister.store');
+            // Turmas
             Route::get('/classesRegister/create', [ClassesController::class, 'create'])->name('classes.classesRegister');
             Route::post('/classesRegister/store', [ClassesController::class, 'store'])->name('classes.classesRegister.store');
+            //Professores
             Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');
             Route::post('teacher/{id}/attach', [SubjectController::class, 'update'])->name('classes.attach-teachers');
+            //Professores anexar
+            Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');
+            Route::post('teacher/{id}/attach', [SubjectController::class, 'update'])->name('classes.attach-teachers');
+            //Alunos
+            Route::get('students/{id}/attach', [UserController::class, 'index'])->name('classes.student');
+            Route::post('student/{id}/attach', [UserController::class, 'update'])->name('classes.students');
+            //Alunos Anexar
             Route::get('students/{id}/attach', [UserController::class, 'index'])->name('classes.student');
             Route::post('student/{id}/attach', [UserController::class, 'update'])->name('classes.students');
         });
-    
-    Route::group(['middleware' => ['can:feedback']], function(){
-        Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedbacks.store');
-    });
-
-    Route::group(['middleware' => ['can:view feedback']], function(){
-        Route::get('teachers/{id}/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
-    });
-
-
-    Route::get('teachers/{id}/attach', [SubjectController::class, 'index'])->name('classes.attach-teacher');
-    Route::get('teachers/{id}/classes', [UserController::class, 'show'])->name('classes.view-classes');
-    Route::post('teacher/{id}/attach', [SubjectController::class, 'update'])->name('classes.attach-teachers');
-
-    Route::get('students/{id}/attach', [UserController::class, 'index'])->name('classes.student');
-    Route::post('student/{id}/attach', [UserController::class, 'update'])->name('classes.students');
         
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-});
-
-require __DIR__ . '/auth.php';
+        Route::group(['middleware' => ['can:feedback']], function(){
+            Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedbacks.store');
+        });
+        
+        Route::group(['middleware' => ['can:view feedback']], function(){
+            Route::get('teachers/{id}/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+        });
+        
+        
+        Route::get('teachers/{id}/classes', [UserController::class, 'show'])->name('classes.view-classes');
+        
+        
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        
+    });
+    
+    require __DIR__ . '/auth.php';
+    

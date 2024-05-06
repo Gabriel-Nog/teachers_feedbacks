@@ -37,11 +37,6 @@ class ClassesController extends Controller
 
         if ($request->subjects_id) {
             $subjectsUser = SubjectsUser::where('subjects_id', $request->subjects_id)->get()->first();
-            if ($subjectsUser == null) {
-                // return redirect()->route('dashboard')
-                //     ->withErrors(['error' => 'Não existe profesores para essa matéria!']);
-                $subject = Subjects::where('id', 0)->get()->first();
-            } else {
                 $subject = Subjects::where('id', $request->subjects_id)->get()->first();
 
                 $classeId = $classes->insertGetId([
@@ -51,13 +46,13 @@ class ClassesController extends Controller
                 ]);
 
                 ClassesUser::create([
-                    'user_id' => $subjectsUser->user_id,
+                    // 'user_id' => $subjectsUser->user_id,
                     'classes_id' => $classeId,
                     'subject' => $subject->name
                 ]);
 
 
-            }
+            
 
         }
 

@@ -48,7 +48,15 @@ class UserController extends Controller
         // $unlikes = $user->professorAsFeedback->where('dislike', '>=', 1)->count();
         $classesUser = ClassesUser::where('user_id', $user->id)->get();
         // , 'likes' => $likes, 'unlikes' => $unlikes
-        
+        if(Auth::user()->roles->first()->name == 'student'){
+            $classesUserStudent = ClassesUser::where('user_id', Auth::user()->id)->get()->first();
+            $classesUser = $classesUser->filter( function($c) use ( $classesUserStudent){
+                return $c -> classes_id == $classesUserStudent -> first()-> classes_id;
+                
+            });
+
+            // dd($classesUser);
+        }
         return view('classes.view-classes', ['user' => $user, 'classesUser' => $classesUser]);
     }
 

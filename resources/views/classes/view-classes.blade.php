@@ -20,7 +20,7 @@
     <div
         class="bg-white dark:bg-gray-800 w-full max-w-6xl h-full rounded-md mt-8 mx-auto p-3 flex flex-col gap-5 justify-between">
         @foreach ($classesUser as $class)
-            {{-- @dd($class) --}}
+            {{-- @dd($classesUser) --}}
             <div class="w-full flex justify-between items-center">
                 <p class="text-gray-400 mb-4 font-semibold text-xl">
                     {{ $user->classeAsParticipant->where('id', $class->classes_id)->first()->name }}

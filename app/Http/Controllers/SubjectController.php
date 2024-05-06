@@ -84,15 +84,14 @@ class SubjectController extends Controller
         $subject = Subjects::where('id', $request->subjects_id)->get();
 
         if ($request->classes_id) {
-            $classesUser = ClassesUser::create([
+            $classesUser = ClassesUser::where('classes_id',$request->classes_id)->update([
                 'user_id' => $id,
-                'classes_id' => $request->classes_id,
                 'subject' => $subject->first()->name
             ]);
         }
 
         if ($request->subjects_id) {
-            $subjectsUser = SubjectsUser::create([
+            $subjectsUser = SubjectsUser::updateOrCreate([
                 'user_id' => $id,
                 'subjects_id' => $request->subjects_id
             ]);
