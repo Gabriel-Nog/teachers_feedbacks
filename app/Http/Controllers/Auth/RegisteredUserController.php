@@ -22,7 +22,21 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         $roles = DB::table('roles')->get();
-        return view('auth.register', ['roles' => $roles]);
+        
+        $namesTranslate = [];
+
+        foreach ($roles as $role){
+            if($role->name == "teacher"){
+                $nameTranslate = "Professor";
+            }else if($role->name == "student"){
+                $nameTranslate = "Aluno";
+            }else{
+                $nameTranslate = "Administrador do Sistema";
+            }
+            array_push($namesTranslate, $nameTranslate);
+        }
+        
+        return view('auth.register', ['roles' => $roles,'namesTranslate'=> $namesTranslate]);
     }
 
     /**

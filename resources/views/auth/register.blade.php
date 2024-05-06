@@ -53,8 +53,12 @@
                 class="max-w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1"
                 name="role_id" id="roles">
                 <option disabled select>Selecione a atribuição</option>
-                @foreach ($roles as $role)
-                    <option value="{{ $role->id }}">{{ __( $role->name.'')   }}</option>
+                
+                {{-- @for ($i = 1; $i < 4; $i++)
+                    <option value="{{ $namesTranslate[$i] }}">{{ $namesTranslate->$i }}</option> 
+                @endfor --}}
+                @foreach ( $namesTranslate as $item)
+                    <option value="{{ $loop->iteration }}">{{ $item }}</option> 
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
