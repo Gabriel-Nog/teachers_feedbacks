@@ -48,7 +48,6 @@
                 $classesUser = $data['classesUser']->filter(function ($class) use ($allClasses) {
                     return $allClasses->first()->id == $class->classes_id;
                 });
-                // dd($classesUser, $subjectsUser);
 
                 $teachers = [];
                 $subjects = [];

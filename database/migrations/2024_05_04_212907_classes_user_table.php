@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('classes_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBiginteger('user_id');
+            $table->unsignedBiginteger('user_id')->nullable();
             $table->unsignedBiginteger('classes_id');
 
             $table->foreign('user_id')->references('id')
