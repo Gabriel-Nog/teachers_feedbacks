@@ -126,6 +126,7 @@
 
                     $allStudents = collect($students);
                 } else {
+                    $allStudents = [Auth::user()];
                     $allTeachers = [];
                 }
             }
