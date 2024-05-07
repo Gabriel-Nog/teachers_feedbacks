@@ -128,6 +128,7 @@
                 } else {
                     $allStudents = [Auth::user()];
                     $allTeachers = [];
+                    $allClasses = [];
                 }
             }
 
