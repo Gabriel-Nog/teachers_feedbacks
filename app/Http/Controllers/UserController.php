@@ -116,11 +116,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $classesUser = ClassesUser::create([
-            'user_id' => $id,
-            'classes_id' => $request->classes_id
-        ]);
-
+        $doesUserAlreadyHaveAClass = ClassesUser::where('user_id', $id)->get()->first();
+        if ($doesUserAlreadyHaveAClass) {
+            $classesUser = ClassesUser::where('user_id', $id)->update([
+                'classes_id' => $request->classes_id
+            ]);
+        } else {
+            $classesUser = ClassesUser::create([
+                'user_id' => $id,
+                'classes_id' => $request->classes_id
+            ]);
+        }
 
         return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');
     }
