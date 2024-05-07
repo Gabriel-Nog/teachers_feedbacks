@@ -14,16 +14,15 @@ echo "Caching routes..."
 php artisan route:cache
 
 echo "Running migrations..."
-php artisan migrate --force --seed=PermissionsSeeder
+php artisan migrate --force
 
 
 echo "Running npm depedencies..."
-npm install
+npm install -g require-global
 
-echo "Running static elemenrs..."
-npm run dev
+# echo "Running static elemenrs..."
+# npm run dev
 
-echo "Running Web-APP"
-php artisan serve
+
 
 echo "done deploying"
