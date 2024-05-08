@@ -13,15 +13,17 @@ php artisan config:cache
 echo "Caching routes..."
 php artisan route:cache
 
+echo "Install global psql"
+sudo apt install postgresql-client
+
+echo "psql --Conect"
+PGPASSWORD=leHXQGXlPAeNHtttVQCmtNUTbQAfY6a7 psql -h dpg-cotm378cmk4c73augfm0-a.oregon-postgres.render.com -U teachers_feedbacks_3iqj_user teachers_feedbacks_3iqj
+
 echo "Running migrations..."
 php artisan migrate --force
 
 echo "Ruuning Seeders..."
 php artisan db:seed PermissionsSeeder
-
-echo "pgsql --Conect"
-
-PGPASSWORD=leHXQGXlPAeNHtttVQCmtNUTbQAfY6a7 psql -h dpg-cotm378cmk4c73augfm0-a.oregon-postgres.render.com -U teachers_feedbacks_3iqj_user teachers_feedbacks_3iqj
 
 echo "Running npm depedencies..."
 echo "installs NVM (Node Version Manager)"
