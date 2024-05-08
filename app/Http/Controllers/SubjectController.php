@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Classes;
 use App\Models\ClassesUser;
+use App\Models\Student;
 use App\Models\Subjects;
 use App\Models\SubjectsUser;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -88,7 +90,9 @@ class SubjectController extends Controller
                 'user_id' => $id,
                 'subject' => $subject->first()->name
             ]);
+
         }
+
 
         if ($request->subjects_id) {
             $subjectsUser = SubjectsUser::updateOrCreate([
@@ -96,6 +100,28 @@ class SubjectController extends Controller
                 'subjects_id' => $request->subjects_id
             ]);
         }
+
+        $classesId = ClassesUser::where('classes_id',$request->classes_id)->first();
+        $subjectId = $subject[0]->id;
+        $userAttached = User::where('id', $subjectsUser->user_id)->first();
+        // dd($classesId->classes_id);
+        $teacher = User::where([['role_id', '=', '2']])->get();
+        $student = User::where([['role_id', '=', '3']])->get();
+
+        if( $userAttached == $teacher ){
+            Teacher::updateOrCreate([
+                'user_id' => $id,
+                'subjects_id' => $subjectId,
+                'classes_id' => $classesId->classes_id,
+            ]);
+
+        }else if( $userAttached == $student){
+            Student::updateOrInsert([
+                'user_id' => $id,
+                'classes_id' => $classesId->classes_id,
+            ]);
+        }
+
 
         return redirect()->route('dashboard')->with('Usuário anexado com sucesso!');
     }

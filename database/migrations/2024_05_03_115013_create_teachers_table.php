@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('subject');
+            $table->foreignId('classes_id')->nullable();
+            $table->foreignId('subject_id')->nullable();
+            $table->foreignId('role_id');
             $table->foreignId('user_id');
             $table->timestamps();
         });
