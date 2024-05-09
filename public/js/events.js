@@ -38,12 +38,16 @@ cpfInput.addEventListener('input', () => {
                 mask += '-'
             }
             mask += v
-            cpfInput.value = mask;
-
         });
+
+        cpfInput.value = mask;
     }
 
     if (cpfInput.value.length > 14) {
         cpfInput.value = cpfInput.value.slice(0, 14);
+    }
+
+    if (cpfInput.value.length < 14) {
+        cpfInput.value = cpfInput.value.replaceAll(/[\.-]/g, '')
     }
 })
