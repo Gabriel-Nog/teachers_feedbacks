@@ -20,4 +20,12 @@ class Classes extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function student(){
+        return $this->hasOne(Student::class);
+    }
+
+    public function teacherClasses(){
+        return $this->hasMany(Teacher::class);
+    }
 }
