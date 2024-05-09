@@ -7,9 +7,13 @@
             name="classes_id" id="class">
             <option disabled select>Selecione a turma</option>
             @foreach ($classes as $class)
-                @foreach ($teachers_name as $teacher_name)
-                 <option value="{{ $class->id }}">{{ $class->name . ' | '. $class->shift. ' | '.$class->year. ' | '.$teacher_name->name}}</option>
-                @endforeach
+                @php
+                    $separator = ' | ';
+                    $attributes = [
+                        $class->name ,$class->shift, $class->year, $class->teacher_name
+                    ];
+                @endphp
+                 <option value="{{ $class->id }}">{{implode($separator, $attributes)}}</option>
             @endforeach
         </select>
         <div class="flex justify-center col-span-2">
