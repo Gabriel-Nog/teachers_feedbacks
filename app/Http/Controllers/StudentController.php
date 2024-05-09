@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassesUser;
 use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -10,9 +12,17 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
-        $teacherInClass = 0;
+    //    user = User::with(['classeAsParticipant'])->where('id', $id)->first();
+    //     $classesUser = ClassesUser::where([
+    //         'user_id' => $id,
+    //         'classes_id' => $user->classes_id
+    //     ]);
+        
+    //     $teachersInClass = Teacher::where(['classes_id', $classesUser->classes_id]);
+
+    //     return view('classes.student', ['teachersInClass' => $teachersInClass]); $
     }
 
     /**

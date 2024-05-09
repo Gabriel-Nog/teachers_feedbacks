@@ -7,7 +7,9 @@
             name="classes_id" id="class">
             <option disabled select>Selecione a turma</option>
             @foreach ($classes as $class)
-                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                @foreach ($teachers_name as $teacher_name)
+                 <option value="{{ $class->id }}">{{ $class->name . ' | '. $class->shift. ' | '.$class->year. ' | '.$teacher_name->name}}</option>
+                @endforeach
             @endforeach
         </select>
         <div class="flex justify-center col-span-2">
