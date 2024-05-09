@@ -34,21 +34,8 @@ class UserController extends Controller
             }
         );
 
-<<<<<<< HEAD
         return view('classes.student', ['id' => $id, 'classes' => $classes]);
-=======
-        $teachers_name = User::where('id', $teachers_filtered[0]->user_id)->get();
-        // dd($teachers_name[0]->name);
-        return view('classes.student', ['id' => $id, 'classes' => $classes, 'teachers_name' => $teachers_name]);
->>>>>>> main
 
-        // $teachers_filtered = Teacher::where('classes_id', '>', 0)->get();
-        // $teacher = Teacher::where('user_ìd', $teachers_filtered->id)->first();
-        // foreach($teachers_filtered as $t){
-        //    $teachers_name =  User::where('id', $t->user_id)->get();
-        // }
-        
-        
     }
 
     /**
