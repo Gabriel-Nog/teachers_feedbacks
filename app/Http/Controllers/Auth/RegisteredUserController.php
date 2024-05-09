@@ -72,12 +72,12 @@ class RegisteredUserController extends Controller
         $userId = $user->id;
 
         if($request->role_id == 2){
-            $newTeacher = Teacher::create([
+             Teacher::create([
                 'role_id' => $request->role_id,
                 'user_id' =>$userId,
             ]);
         }elseif($request->role_id == 3){
-            $newStudent = Student::create([
+             Student::create([
                 'role_id' => $request->role_id,
                 'user_id' => $userId,
             ]);

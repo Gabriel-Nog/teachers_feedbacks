@@ -7,6 +7,7 @@ use App\Models\Subjects;
 use App\Models\SubjectsUser;
 use App\Models\Student;
 use App\Models\Teacher;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Classes;
@@ -19,12 +20,21 @@ class UserController extends Controller
      */
     public function index(string $id)
     {
-        $classes = Classes::all();
-        $teachers_filtered = Teacher::where('classes_id', '>', 0)->get();
+        $classes = Classes::all()->filter(
+            function($class){
+                return $class -> teacherClasses->count() > 0;
+            }
+        )->map(
+            function($class){
+                $teacher_userId = $class->teacherClasses->first()->user_id;
+                $teacher = User::find($teacher_userId);
+                
+                $class->teacher_name = $teacher->name;
+                return $class;
+            }
+        );
 
-        $teachers_name = User::where('id', $teachers_filtered[0]->user_id)->get();
-        // dd($teachers_name[0]->name);
-        return view('classes.student', ['id' => $id, 'classes' => $classes, 'teachers_name' => $teachers_name]);
+        return view('classes.student', ['id' => $id, 'classes' => $classes]);
 
     }
 
@@ -136,8 +146,7 @@ class UserController extends Controller
                     ['user_id' => $userAttached->id],
                     ['classes_id' => $classesUser->classes_id, 'role_id' => $userAttached->role_id, 'created_at' => now(), 'updated_at' => now()]
                 );
-            }
-
+            }   
             return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');
         }
     }
