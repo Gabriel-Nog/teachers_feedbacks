@@ -6,6 +6,7 @@ use App\Models\Feedback;
 use App\Models\Subjects;
 use App\Models\SubjectsUser;
 use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Classes;
@@ -19,7 +20,12 @@ class UserController extends Controller
     public function index(string $id)
     {
         $classes = Classes::all();
-        return view('classes.student', ['id' => $id, 'classes' => $classes]);
+        $teachers_filtered = Teacher::where('classes_id', '>', 0)->get();
+
+        $teachers_name = User::where('id', $teachers_filtered[0]->user_id)->get();
+        // dd($teachers_name[0]->name);
+        return view('classes.student', ['id'=> $id, 'classes' => $classes, 'teachers_name' =>  $teachers_name]);
+
     }
 
     /**
