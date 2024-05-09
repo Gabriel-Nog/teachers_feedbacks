@@ -52,7 +52,7 @@ class PermissionsSeeder extends Seeder
         $admin = User::factory()->create([
             'name' => 'Usuário Administrador',
             'email' => 'admin@email.com',
-            'password' => Hash::make(env('ADMIN_PASSWORD', '12345678')),
+            'password' => Hash::make(env('ADMIN_PASSWORD', 'admin$123')),
             'cpf' => '12345678912',
             'role_id' => '1'
         ]);

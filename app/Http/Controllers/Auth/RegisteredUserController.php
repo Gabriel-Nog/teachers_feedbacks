@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
 use App\Models\User;
+use App\Models\Teacher;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -67,8 +69,22 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $user->assignRole($role);
+        $userId = $user->id;
 
+        if($request->role_id == 2){
+            $newTeacher = Teacher::create([
+                'role_id' => $request->role_id,
+                'user_id' =>$userId,
+            ]);
+        }elseif($request->role_id == 3){
+            $newStudent = Student::create([
+                'role_id' => $request->role_id,
+                'user_id' => $userId,
+            ]);
+        }
+
+
+        $user->assignRole($role);
         event(new Registered($user));
 
         //Auth::login($user);

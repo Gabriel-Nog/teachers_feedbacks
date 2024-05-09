@@ -16,3 +16,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+.dockerignore
+Dockerfile
+conf/nginx
+scripts

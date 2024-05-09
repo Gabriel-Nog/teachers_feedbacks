@@ -14,7 +14,7 @@
         <div class="col-start-2 col-end-2">
             <x-input-label for="cpf" :value="__('CPF')" />
             <x-text-input id="cpf" class="block mt-1 w-full" type="text" name="cpf" :value="old('cpf')"
-                required autocomplete="cpf" />
+                required />
             <x-input-error :messages="$errors->get('cpf')" class="mt-2" />
         </div>
 
