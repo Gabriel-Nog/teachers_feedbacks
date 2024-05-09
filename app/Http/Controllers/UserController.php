@@ -34,7 +34,13 @@ class UserController extends Controller
             }
         );
 
+<<<<<<< HEAD
         return view('classes.student', ['id' => $id, 'classes' => $classes]);
+=======
+        $teachers_name = User::where('id', $teachers_filtered[0]->user_id)->get();
+        // dd($teachers_name[0]->name);
+        return view('classes.student', ['id' => $id, 'classes' => $classes, 'teachers_name' => $teachers_name]);
+>>>>>>> main
 
         // $teachers_filtered = Teacher::where('classes_id', '>', 0)->get();
         // $teacher = Teacher::where('user_ìd', $teachers_filtered->id)->first();
@@ -88,7 +94,7 @@ class UserController extends Controller
         $classesUser = ClassesUser::all('*');
         $subjects = Subjects::all();
         $subjectsUser = SubjectsUser::all();
-        
+
         $teachers = $users->filter(function ($user) {
             $roles = $user?->roles->pluck('name') ?? collect([]);
 
@@ -145,13 +151,13 @@ class UserController extends Controller
                 'user_id' => $id,
                 'classes_id' => $request->classes_id
             ]);
-            $userAttached = User::where('id', $classesUser ->user_id)->first();
+            $userAttached = User::where('id', $classesUser->user_id)->first();
             $student = 3;
-    
-            if( $userAttached->role_id == $student){
+
+            if ($userAttached->role_id == $student) {
                 $userAttached = Student::updateOrInsert(
-                    ['user_id' =>  $userAttached->id],
-                    ['classes_id' => $classesUser->classes_id, 'role_id' =>  $userAttached->role_id, 'created_at' => now(), 'updated_at' =>now()]
+                    ['user_id' => $userAttached->id],
+                    ['classes_id' => $classesUser->classes_id, 'role_id' => $userAttached->role_id, 'created_at' => now(), 'updated_at' => now()]
                 );
             }   
             return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');

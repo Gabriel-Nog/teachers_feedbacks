@@ -19,6 +19,35 @@ function handleFeedbackAction(event) {
 
     buttonClicked.style.opacity = "1";
     feedbackAction.value = action;
-
-
 }
+
+const cpfInput = document.querySelector('#cpf');
+
+cpfInput.addEventListener('input', () => {
+    let cpfArr = [];
+    let mask = '';
+    if (cpfInput.value.replaceAll(/[\.-]/g, '').length == 11) {
+        cpfArr = cpfInput.value.split('');
+
+        cpfArr.forEach((v) => {
+            if (mask.length == 3 || mask.length == 7) {
+                mask += '.'
+            }
+
+            if (mask.length == 11) {
+                mask += '-'
+            }
+            mask += v
+        });
+
+        cpfInput.value = mask;
+    }
+
+    if (cpfInput.value.length > 14) {
+        cpfInput.value = cpfInput.value.slice(0, 14);
+    }
+
+    if (cpfInput.value.length < 14) {
+        cpfInput.value = cpfInput.value.replaceAll(/[\.-]/g, '')
+    }
+})

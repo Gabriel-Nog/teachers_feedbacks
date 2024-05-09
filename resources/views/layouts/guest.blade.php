@@ -29,6 +29,7 @@
             {{ $slot }}
         </div>
     </div>
+    <script src="./js/events.js"></script>
 </body>
 
 </html>

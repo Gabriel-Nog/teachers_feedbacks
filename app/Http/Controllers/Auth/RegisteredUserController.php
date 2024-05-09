@@ -87,8 +87,6 @@ class RegisteredUserController extends Controller
         $user->assignRole($role);
         event(new Registered($user));
 
-        //Auth::login($user);
-
         return redirect()->route('dashboard')->with('msg', 'Usuário criado com sucesso!');
     }
 }
