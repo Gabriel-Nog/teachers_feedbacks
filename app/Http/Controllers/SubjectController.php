@@ -48,11 +48,6 @@ class SubjectController extends Controller
         ]);
 
 
-        // SubjectsUser::create([
-        //     'user_id' => $request->user_id,
-        //     'subjects_id' => $subjectId
-        // ]);
-
         return redirect()
             ->route('dashboard')
             ->with('msg', 'Disciplina Criada Com Sucesso!');
@@ -101,25 +96,25 @@ class SubjectController extends Controller
             ]);
         }
 
+        //Resgata a Classe em questão
         $classesId = ClassesUser::where('classes_id',$request->classes_id)->first();
+        //Resgata a Disciplina em questão
         $subjectId = $subject[0]->id;
+        //Resgata o usuário em questão
         $userAttached = User::where('id', $subjectsUser->user_id)->first();
-        // dd($classesId->classes_id);
-        $teacher = User::where([['role_id', '=', '2']])->get();
-        $student = User::where([['role_id', '=', '3']])->get();
+        
 
-        if( $userAttached == $teacher ){
-            Teacher::updateOrCreate([
-                'user_id' => $id,
-                'subjects_id' => $subjectId,
-                'classes_id' => $classesId->classes_id,
-            ]);
 
-        }else if( $userAttached == $student){
-            Student::updateOrInsert([
-                'user_id' => $id,
-                'classes_id' => $classesId->classes_id,
-            ]);
+        //Confirmação de Roles;
+        $teacher = 2;
+
+        //Inserindo nas model de Teacher e Student;
+        if( $userAttached->role_id == $teacher ){
+            $userAttached = Teacher::updateOrInsert(
+                ['user_id' =>  $userAttached->id],
+                ['classes_id' => $classesId->classes_id, 'subject_id' => $subjectId, 'role_id' =>  $userAttached->role_id, 'created_at' => now(), 'updated_at' =>now()]
+            );
+
         }
 
 
