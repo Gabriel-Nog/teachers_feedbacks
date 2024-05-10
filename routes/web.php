@@ -46,8 +46,11 @@ Route::middleware('auth')->group(function () {
         //Alunos Anexar
         Route::get('alunos/{id}/anexar', [UserController::class, 'index'])->name('classes.student');
         Route::post('aluno/{id}/anexar', [UserController::class, 'update'])->name('classes.students');
-    });
 
+        
+        },
+    );
+    
     Route::group(['middleware' => ['can:feedback']], function () {
         Route::post('/feedback/gravar', [FeedbackController::class, 'store'])->name('feedbacks.store');
     });

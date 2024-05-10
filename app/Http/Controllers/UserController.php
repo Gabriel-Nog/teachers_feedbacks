@@ -87,33 +87,28 @@ class UserController extends Controller
 
             return $roles->contains('teacher');
         })->map(function ($teacher) {
-            // dd($teacher->professorAsFeedback->pluck('user_email')->toArray());
             $teacher->emails_feedbacks = $teacher->professorAsFeedback->pluck('user_email')->toArray();
             return $teacher;
 
 
         });
 
-
-        // $doesStudentFeedbacked = Feedback::where('user_email', Auth::user()->first()->email)->get()->first();
-        // dd($doesStudentFeedbacked);
         $students = $users->filter(function ($user) {
             $roles = $user?->roles->pluck('name') ?? collect([]);
 
             return $roles->contains('student');
         });
-
+        
         return view('dashboard', [
-            'teachers' => $teachers,
-            'students' => $students,
-            'subjects' => $subjects,
-            'classes' => $classes,
-            'subjectsUser' => $subjectsUser,
-            'classesUser' => $classesUser,
-        ]);
+                'teachers' => $teachers,
+                'students' => $students,
+                'subjects' => $subjects,
+                'classes' => $classes,
+                'subjectsUser' => $subjectsUser,
+                'classesUser' => $classesUser,
+            ]);
+          
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
