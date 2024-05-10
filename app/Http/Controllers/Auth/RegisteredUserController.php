@@ -50,16 +50,20 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // dd(preg_match("/^\d{3}\.\d{3}\.\d{3}-\d{2}/", $request->cpf));
+        if(!preg_match("/^\d{3}\.\d{3}\.\d{3}-\d{2}/", $request->cpf)){
+            return redirect()->back()->with('errors', 'Formato do cpf inválido');
+        }
+
+        $request['cpf'] = preg_replace('/[^0-9]/', '', $request->cpf);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'cpf' => ['required', new CPF],
+            'cpf' => ['required', 'string', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'role_id' => ['required', 'int'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
-
-        $request['cpf'] = preg_replace('/[^0-9]/', '', $request->cpf);
 
 
         $role = Role::findOrFail($request->role_id);

@@ -73,9 +73,13 @@ class UserController extends Controller
         return view('classes.view-classes', ['user' => $user, 'classesUser' => $classesUser]);
     }
 
+    
     public function showAll()
     {
-
+        $counter = 0; // Inicializa o contador
+        // Dentro do loop ou lógica:
+        $amount = $counter; // Atribui o valor do contador a $amount
+        $counter++;
         $users = User::all('*');
         $classes = Classes::all('*');
         $classesUser = ClassesUser::all('*');
@@ -106,6 +110,7 @@ class UserController extends Controller
                 'classes' => $classes,
                 'subjectsUser' => $subjectsUser,
                 'classesUser' => $classesUser,
+                'amount' => $amount
             ]);
           
     }

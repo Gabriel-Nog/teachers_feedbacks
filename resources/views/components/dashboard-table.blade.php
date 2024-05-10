@@ -11,6 +11,9 @@
 
     <div class="w-full bg-white dark:bg-gray-800 text-white overflow-hidden shadow-sm sm:rounded-lg">
         @php
+
+            $amount = 10;
+
             $allSubjects = $data['subjects'];
             $allClasses = $data['classes'];
             $allTeachers = $data['teachers'];
@@ -312,7 +315,10 @@
                             @endif
                         </x-t-row>
                     @endforeach
+                   {{-- <div x-intersect.full="$wire.{{ (new App\Http\Controllers\UserController)->showAll()}}">{{$amount}}
+                   </div> --}}
                 @endif
+                
                 @if (request('type') == 'Turmas' || $isEmpty)
                     @foreach ($allClasses as $class)
                         <x-t-row>
