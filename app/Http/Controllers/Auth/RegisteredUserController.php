@@ -7,7 +7,9 @@ use App\Models\Student;
 use App\Models\User;
 use App\Models\Teacher;
 use App\Providers\RouteServiceProvider;
+use App\Rules\CPF;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -50,13 +52,15 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'cpf' => ['required', new CPF],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'cpf' => ['required', 'string', 'regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', 'unique:' . User::class],
             'role_id' => ['required', 'int'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+
         $request['cpf'] = preg_replace('/[^0-9]/', '', $request->cpf);
+
 
         $role = Role::findOrFail($request->role_id);
 
