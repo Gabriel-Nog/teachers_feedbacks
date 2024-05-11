@@ -21,18 +21,18 @@ class UserController extends Controller
     public function index(string $id)
     {
         $classes = Classes::all()->filter(
-            function($class){
-                return $class -> teacherClasses->count() > 0;
+            function ($class) {
+                return $class->teacherClasses->count() > 0;
             }
         )->map(
-            function($class){
-                $teacher_userId = $class->teacherClasses->first()->user_id;
-                $teacher = User::find($teacher_userId);
-                
-                $class->teacher_name = $teacher->name;
-                return $class;
-            }
-        );
+                function ($class) {
+                    $teacher_userId = $class->teacherClasses->first()->user_id;
+                    $teacher = User::find($teacher_userId);
+
+                    $class->teacher_name = $teacher->name;
+                    return $class;
+                }
+            );
 
         return view('classes.student', ['id' => $id, 'classes' => $classes]);
 
@@ -76,16 +76,13 @@ class UserController extends Controller
     
     public function showAll()
     {
-        $counter = 0; // Inicializa o contador
-        // Dentro do loop ou lógica:
-        $amount = $counter; // Atribui o valor do contador a $amount
-        $counter++;
-        $users = User::all('*');
+
+        $users = User::all();
         $classes = Classes::all('*');
         $classesUser = ClassesUser::all('*');
         $subjects = Subjects::all();
         $subjectsUser = SubjectsUser::all();
-
+        // dd($users->where('id', 16)->first());
         $teachers = $users->filter(function ($user) {
             $roles = $user?->roles->pluck('name') ?? collect([]);
 
@@ -97,6 +94,9 @@ class UserController extends Controller
 
         });
 
+        // dd($teachers);
+        // $doesStudentFeedbacked = Feedback::where('user_email', Auth::user()->first()->email)->get()->first();
+        // dd($doesStudentFeedbacked);
         $students = $users->filter(function ($user) {
             $roles = $user?->roles->pluck('name') ?? collect([]);
 
@@ -110,7 +110,6 @@ class UserController extends Controller
                 'classes' => $classes,
                 'subjectsUser' => $subjectsUser,
                 'classesUser' => $classesUser,
-                'amount' => $amount
             ]);
           
     }
@@ -146,7 +145,7 @@ class UserController extends Controller
                     ['user_id' => $userAttached->id],
                     ['classes_id' => $classesUser->classes_id, 'role_id' => $userAttached->role_id, 'created_at' => now(), 'updated_at' => now()]
                 );
-            }   
+            }
             return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');
         }
     }

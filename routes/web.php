@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['miidleware' => ['can:create teacher', 'can:create student']], function () {
         Route::get('criar-usuarios/csv', [CsvController::class, 'index'])->name('csv.add-csv');
+        Route::post('criar-usuarios/csv', [CsvController::class, 'importUserCsv'])->name('store.csv-file');
     });
 
     Route::get('professores/{id}/turmas', [UserController::class, 'show'])->name('classes.view-classes');
