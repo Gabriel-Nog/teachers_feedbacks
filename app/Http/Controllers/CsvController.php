@@ -2,61 +2,97 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
+use App\Models\ClassesUser;
+use App\Models\Student;
+use App\Models\Subjects;
+use App\Models\SubjectsUser;
+use App\Models\Teacher;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
+use Spatie\Permission\Models\Role;
 
 class CsvController extends Controller
 {
+    // TODO: Adicionar o commit do joão
     public function index()
     {
-        return view('csv.add-csv');
+        $users = User::latest();
+        $classes = Classes::latest();
+        $subjects = Subjects::latest();
+        return view('csv.add-csv', ['users' => $users, 'classes' => $classes, 'subjects' => $subjects]);
     }
 
     public function importUserCsv(Request $request)
     {
-        // $request->validate([
-        //     'csv-input' => 'required|mimes:csv',
-        // ]);
-        //read csv file and skip data
-        $file = $request->file('csvInput');
-        $handle = fopen($file->path(), 'r');
 
-        //skip the header row
-        fgetcsv($handle);
+        $request->validate([
+            'type' => 'required',
+            'csvInput' => 'required',
+        ]);
 
+        if ($request->hasFile('csvInput') && $request->csvInput->getClientOriginalExtension() == 'csv') {
+            // dd($request->type);
+            $file = $request->file('csvInput');
+            $handle = fopen($file->path(), 'r');
 
-        $chunkSize = 200;
-        while (!feof($handle)) {
-            $chunkData = [];
+            fgetcsv($handle, null, ';');
 
-            for ($i = 0; $i < $chunkSize; $i++) {
-                $data = fgetcsv($handle);
+            $chunkSize = 3;
 
-                if ($data == false) {
-                    break;
+            while (!feof($handle)) {
+                $chunkData = [];
+
+                for ($i = 0; $i < $chunkSize; $i++) {
+
+                    $data = fgetcsv($handle, null, ';');
+
+                    if ($data == false || $data == null) {
+                        break;
+                    }
+
+                    array_push($chunkData, $data);
                 }
 
-                $chunkData[] = $data;
+                switch ($request->type) {
+                    case 'user':
+                        $this->createUser($chunkData);
+                        break;
+                    case 'class':
+                        $this->createClass($chunkData);
+                        break;
+                    case 'subject':
+                        $this->createSubejct($chunkData);
+                        break;
+                }
             }
 
-            $this->createUser($chunkData);
+
+            fclose($handle);
+            return redirect()->route('dashboard')->with('msg', 'Arquivo adicionado com sucesso!');
+        } else {
+            return redirect()->back()->withErrors(['csvInput' => 'Arquivo inválido!']);
         }
 
-        fclose($handle);
     }
-    public function createUser($chunkData)
+
+
+    protected function createUser($chunkData)
     {
-
-
         foreach ($chunkData as $line) {
             $user = $line;
 
             $role = 0;
-            switch ($user[3]) {
-                case 'Aluno':
+
+            switch (strtolower($user[4])) {
+                case 'aluno':
                     $role = 3;
                     break;
-                case 'Professor':
+                case 'professor':
                     $role = 2;
                     break;
                 default:
@@ -64,13 +100,54 @@ class CsvController extends Controller
                     break;
             }
 
-            User::create([
+            $user = User::create([
                 "name" => $user[0],
                 "email" => $user[1],
                 "cpf" => $user[2],
-                'password' => $user[3],
+                'password' => Hash::make($user[3]),
                 'role_id' => $role
+            ]);
+
+            $roleRelation = Role::findOrFail($role);
+
+            $user->assignRole($roleRelation);
+            event(new Registered($user));
+
+            if ($role == 3) {
+                Student::create([
+                    'user_id' => $user->id,
+                    'role_id' => $role
+                ]);
+            } else {
+                Teacher::create([
+                    'user_id' => $user->id,
+                    'role_id' => $role
+                ]);
+            }
+        }
+    }
+
+    protected function createClass($chunkData)
+    {
+        foreach ($chunkData as $line) {
+            $class = $line;
+
+            Classes::create([
+                "name" => $class[0],
+                "shift" => $class[1],
+                "year" => $class[2],
             ]);
         }
     }
+
+    protected function createSubejct($chunkData)
+    {
+        foreach ($chunkData as $line) {
+            $subject = $line;
+            Subjects::create([
+                "name" => $subject[0],
+            ]);
+        }
+    }
+
 }
