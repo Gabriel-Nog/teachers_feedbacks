@@ -130,7 +130,7 @@ class UserController extends Controller
         $doesUserAlreadyHaveAClass = ClassesUser::where('user_id', $id)->get()->first();
         if ($doesUserAlreadyHaveAClass) {
             $classesUser = ClassesUser::where('user_id', $id)->update([
-                'classes_id' => $request->classes_id
+                'classes_id' => $request->classes_id,
             ]);
         } else {
             $classesUser = ClassesUser::create([
@@ -146,8 +146,8 @@ class UserController extends Controller
                     ['classes_id' => $classesUser->classes_id, 'role_id' => $userAttached->role_id, 'created_at' => now(), 'updated_at' => now()]
                 );
             }
-            return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');
         }
+        return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');
     }
 
     /**

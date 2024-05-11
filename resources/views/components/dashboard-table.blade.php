@@ -297,28 +297,29 @@
                         </x-t-row>
                     @endforeach
                 @endif
-                @if (request('type') == 'Alunos')
-                    @foreach ($allStudents as $user)
-                        <x-t-row>
-                            <x-t-data>{{ $user->name }}</x-t-data>
-                            <x-t-data>{{ $user->email }}</x-t-data>
-                            @if ($user->classeAsParticipant->count() > 0)
-                                <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
-                            @else
-                                <x-t-data>{{ __('N/A') }}</x-t-data>
-                            @endif
-                            @if (Auth::user()->roles[0]->name == 'super-admin')
-                                <x-t-data>
-                                    <a href="{{ route('classes.student', $user->id) }}"
-                                        class="text-gray-500 hover:underline">Anexar a uma turma</a>
-                                </x-t-data>
-                            @endif
-                        </x-t-row>
-                    @endforeach
-                   {{-- <div x-intersect.full="$wire.{{ (new App\Http\Controllers\UserController)->showAll()}}">{{$amount}}
-                   </div> --}}
-                @endif
-                
+                <div x-data="{ shown: false }" x-intersect="shown = true">
+                    <div x-show="shown" x-transition>
+                        @if (request('type') == 'Alunos')
+                            @foreach ($allStudents as $user)
+                                <x-t-row>
+                                    <x-t-data>{{ $user->name }}</x-t-data>
+                                    <x-t-data>{{ $user->email }}</x-t-data>
+                                    @if ($user->classeAsParticipant->count() > 0)
+                                        <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
+                                    @else
+                                        <x-t-data>{{ __('N/A') }}</x-t-data>
+                                    @endif
+                                    @if (Auth::user()->roles[0]->name == 'super-admin')
+                                        <x-t-data>
+                                            <a href="{{ route('classes.student', $user->id) }}"
+                                                class="text-gray-500 hover:underline">Anexar a uma turma</a>
+                                        </x-t-data>
+                                    @endif
+                                </x-t-row>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
                 @if (request('type') == 'Turmas' || $isEmpty)
                     @foreach ($allClasses as $class)
                         <x-t-row>
