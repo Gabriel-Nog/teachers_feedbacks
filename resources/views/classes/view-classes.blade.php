@@ -23,7 +23,9 @@
             {{-- @dd($classesUser) --}}
             <div class="w-full flex justify-between items-center">
                 <p class="text-gray-400 mb-4 font-semibold text-xl">
-                    {{ $user->classeAsParticipant->where('id', $class->classes_id)->first()->name }}
+                    {{ $user->classeAsParticipant->where('id', $class->classes_id)->first()->name.
+                     ' | '
+                     . $user->classeAsParticipant->where('id', $class->classes_id)->first()->shift}}
                 </p>
                 <p class="text-white mb-4 font-semibold text-base">{{ $class->subject }}</p>
             </div>

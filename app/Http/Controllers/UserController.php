@@ -5,8 +5,10 @@ use App\Models\ClassesUser;
 use App\Models\Feedback;
 use App\Models\Subjects;
 use App\Models\SubjectsUser;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Classes;
 use Illuminate\Http\Request;
@@ -18,8 +20,22 @@ class UserController extends Controller
      */
     public function index(string $id)
     {
-        $classes = Classes::all();
+        $classes = Classes::all()->filter(
+            function ($class) {
+                return $class->teacherClasses->count() > 0;
+            }
+        )->map(
+                function ($class) {
+                    $teacher_userId = $class->teacherClasses->first()->user_id;
+                    $teacher = User::find($teacher_userId);
+
+                    $class->teacher_name = $teacher->name;
+                    return $class;
+                }
+            );
+
         return view('classes.student', ['id' => $id, 'classes' => $classes]);
+
     }
 
     /**
@@ -57,32 +73,28 @@ class UserController extends Controller
         return view('classes.view-classes', ['user' => $user, 'classesUser' => $classesUser]);
     }
 
+    
     public function showAll()
     {
 
-        $users = User::all('*');
+        $users = User::all();
         $classes = Classes::all('*');
         $classesUser = ClassesUser::all('*');
         $subjects = Subjects::all();
         $subjectsUser = SubjectsUser::all();
-        // $teachers = $users->filter(function ($user) {
-        //     $roles = $user?->roles->pluck('name') ?? collect([]);
-
-        //     return $roles->contains('teacher');
-        // });
+        // dd($users->where('id', 16)->first());
         $teachers = $users->filter(function ($user) {
             $roles = $user?->roles->pluck('name') ?? collect([]);
 
             return $roles->contains('teacher');
         })->map(function ($teacher) {
-            // dd($teacher->professorAsFeedback->pluck('user_email')->toArray());
             $teacher->emails_feedbacks = $teacher->professorAsFeedback->pluck('user_email')->toArray();
             return $teacher;
 
 
         });
 
-
+        // dd($teachers);
         // $doesStudentFeedbacked = Feedback::where('user_email', Auth::user()->first()->email)->get()->first();
         // dd($doesStudentFeedbacked);
         $students = $users->filter(function ($user) {
@@ -90,18 +102,17 @@ class UserController extends Controller
 
             return $roles->contains('student');
         });
-
+        
         return view('dashboard', [
-            'teachers' => $teachers,
-            'students' => $students,
-            'subjects' => $subjects,
-            'classes' => $classes,
-            'subjectsUser' => $subjectsUser,
-            'classesUser' => $classesUser,
-        ]);
+                'teachers' => $teachers,
+                'students' => $students,
+                'subjects' => $subjects,
+                'classes' => $classes,
+                'subjectsUser' => $subjectsUser,
+                'classesUser' => $classesUser,
+            ]);
+          
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -116,12 +127,26 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $classesUser = ClassesUser::create([
-            'user_id' => $id,
-            'classes_id' => $request->classes_id
-        ]);
+        $doesUserAlreadyHaveAClass = ClassesUser::where('user_id', $id)->get()->first();
+        if ($doesUserAlreadyHaveAClass) {
+            $classesUser = ClassesUser::where('user_id', $id)->update([
+                'classes_id' => $request->classes_id,
+            ]);
+        } else {
+            $classesUser = ClassesUser::create([
+                'user_id' => $id,
+                'classes_id' => $request->classes_id
+            ]);
+            $userAttached = User::where('id', $classesUser->user_id)->first();
+            $student = 3;
 
-
+            if ($userAttached->role_id == $student) {
+                $userAttached = Student::updateOrInsert(
+                    ['user_id' => $userAttached->id],
+                    ['classes_id' => $classesUser->classes_id, 'role_id' => $userAttached->role_id, 'created_at' => now(), 'updated_at' => now()]
+                );
+            }
+        }
         return redirect()->route('dashboard')->with('msg', 'Usuário anexado com sucesso!');
     }
 

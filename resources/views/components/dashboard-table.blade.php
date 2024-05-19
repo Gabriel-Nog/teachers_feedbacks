@@ -11,6 +11,9 @@
 
     <div class="w-full bg-white dark:bg-gray-800 text-white overflow-hidden shadow-sm sm:rounded-lg">
         @php
+
+            $amount = 10;
+
             $allSubjects = $data['subjects'];
             $allClasses = $data['classes'];
             $allTeachers = $data['teachers'];
@@ -126,7 +129,9 @@
 
                     $allStudents = collect($students);
                 } else {
+                    $allStudents = [Auth::user()];
                     $allTeachers = [];
+                    $allClasses = [];
                 }
             }
 
@@ -200,126 +205,138 @@
             @endif
 
             <x-table-body>
-                @if (request('type') == 'Professores')
-                    @foreach ($allTeachers as $user)
-                        <x-t-row>
-                            <x-t-data>{{ $user->name }}</x-t-data>
-                            <x-t-data>{{ $user->email }}</x-t-data>
-                            @if ($user->classeAsParticipant->count() > 0)
-                                <x-t-data>
-                                    <a href="{{ route('classes.view-classes', $user->id) }}"
-                                        class="text-gray-500 hover:underline">Ver turmas/disciplinas</a>
-                                </x-t-data>
-                            @else
-                                <x-t-data>{{ __('N/A') }}</x-t-data>
-                            @endif
+                <div x-data="{ shown: false }" x-intersect="shown = true">
+                    <div x-show="shown" x-transition>
+                        @if (request('type') == 'Professores')
+                            @foreach ($allTeachers as $user)
+                                <x-t-row>
+                                    <x-t-data>{{ $user->name }}</x-t-data>
+                                    <x-t-data>{{ $user->email }}</x-t-data>
+                                    @if ($user->classeAsParticipant->count() > 0)
+                                        <x-t-data>
+                                            <a href="{{ route('classes.view-classes', $user->id) }}"
+                                                class="text-gray-500 hover:underline">Ver turmas/disciplinas</a>
+                                        </x-t-data>
+                                    @else
+                                        <x-t-data>{{ __('N/A') }}</x-t-data>
+                                    @endif
 
-                            @if (Auth::user()->roles[0]->name == 'student')
-                                @if (!in_array(Auth::user()->email, $user->emails_feedbacks))
-                                    <x-t-data>
-                                        <x-nav-link x-data=""
-                                            x-on:click.prevent="$dispatch('open-modal', 'feedback-modal-{{ $user->id }}')">{{ __('Feedback') }}</x-nav-link>
+                                    @if (Auth::user()->roles[0]->name == 'student')
+                                        @if (!in_array(Auth::user()->email, $user->emails_feedbacks))
+                                            <x-t-data>
+                                                <x-nav-link x-data=""
+                                                    x-on:click.prevent="$dispatch('open-modal', 'feedback-modal-{{ $user->id }}')">{{ __('Feedback') }}</x-nav-link>
 
-                                        <x-modal name="feedback-modal-{{ $user->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                            <form method="POST" action="{{ route('feedbacks.store') }}" class="p-6">
-                                                @csrf
-                                                @method('POST')
+                                                <x-modal name="feedback-modal-{{ $user->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                                    <form method="POST" action="{{ route('feedbacks.store') }}" class="p-6">
+                                                        @csrf
+                                                        @method('POST')
 
-                                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                                    {{ 'Avaliando: ' . $user->subjectAsParticipant->first()->name . ' > ' . $user->name }}
+                                                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                                            {{ 'Avaliando: ' . $user->subjectAsParticipant->first()->name . ' > ' . $user->name }}
 
-                                                </h2>
+                                                        </h2>
 
-                                                <div>
-                                                    <x-sucess-button class="active" type="button" class="p-6 mt-3 mr-2"
-                                                        data-action="like" onclick="handleFeedbackAction(event)">
-                                                        <div class="flex items-center gap-2">
-                                                            <iconify-icon icon="mdi:like-outline" width="28"
-                                                                height="28" style="color: #fff"
-                                                                title="like"></iconify-icon>
-                                                    </x-sucess-button>
-                                                    <x-danger-button type="button" class="p-6 mt-3 ml-3"
-                                                        data-action="dislike" onclick="handleFeedbackAction(event)">
-                                                        <iconify-icon icon="mdi:like-outline" width="28"
-                                                            height="28"
-                                                            style="color: #fff; transform: rotate(.5turn);"
-                                                            title="unlike"></iconify-icon>
-                                                    </x-danger-button>
-                                                </div>
+                                                        <div>
+                                                            <x-sucess-button class="active" type="button" class="p-6 mt-3 mr-2"
+                                                                data-action="like" onclick="handleFeedbackAction(event)">
+                                                                <div class="flex items-center gap-2">
+                                                                    <iconify-icon icon="mdi:like-outline" width="28"
+                                                                        height="28" style="color: #fff"
+                                                                        title="like"></iconify-icon>
+                                                            </x-sucess-button>
+                                                            <x-danger-button type="button" class="p-6 mt-3 ml-3"
+                                                                data-action="dislike" onclick="handleFeedbackAction(event)">
+                                                                <iconify-icon icon="mdi:like-outline" width="28"
+                                                                    height="28"
+                                                                    style="color: #fff; transform: rotate(.5turn);"
+                                                                    title="unlike"></iconify-icon>
+                                                            </x-danger-button>
+                                                        </div>
 
-                                                <input type="hidden" name="feedback_action" class="feedback_action" />
-                                                <input type="hidden" name="teacher_id" value="{{ $user->id }}" />
+                                                        <input type="hidden" name="feedback_action" class="feedback_action" />
+                                                        <input type="hidden" name="teacher_id" value="{{ $user->id }}" />
 
-                                                <div class="mt-6">
-                                                    <x-input-label for="comment" value="{{ __('Comentário') }}" />
+                                                        <div class="mt-6">
+                                                            <x-input-label for="comment" value="{{ __('Comentário') }}" />
 
-                                                    <x-text-area id="comment" name="comment" type="comment"
-                                                        class="mt-1 auto w-5/6" />
+                                                            <x-text-area id="comment" name="comment" type="comment"
+                                                                class="mt-1 auto w-5/6" />
 
-                                                    <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-                                                </div>
+                                                            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                                        </div>
 
-                                                <div class="mt-6 flex justify-end">
-                                                    <x-secondary-button x-on:click="$dispatch('close')">
-                                                        {{ __('Cancelar') }}
-                                                    </x-secondary-button>
+                                                        <div class="mt-6 flex justify-end">
+                                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                                {{ __('Cancelar') }}
+                                                            </x-secondary-button>
 
-                                                    <x-primary-button class="ms-3">
-                                                        {{ __('Enviar') }}
-                                                    </x-primary-button>
-                                                </div>
-                                            </form>
-                                        </x-modal>
-                                    </x-t-data>
-                                @else
-                                    <x-t-data>{{ 'Feedback enviado!' }}</x-t-data>
-                                @endif
-                            @endif
-                            @if (Auth::user()->roles[0]->name == 'super-admin')
-                                <x-t-data>
-                                    <a href="{{ route('classes.attach-teacher', $user->id) }}"
-                                        class="text-gray-500 hover:underline">Anexar/Editar turma ou disciplina</a>
-                                </x-t-data>
-                            @endif
-                            @if (Auth::user()->roles[0]->name == 'teacher' || Auth::user()->roles[0]->name == 'super-admin')
-                                <x-t-data>
-                                    <a href="professores/{{ $user->id }}/feedbacks"
-                                        class="text-gray-500 text-sm hover:underline">
-                                        Ver Feedbacks
-                                    </a>
-                                </x-t-data>
-                            @endif
-                        </x-t-row>
-                    @endforeach
-                @endif
-                @if (request('type') == 'Alunos')
-                    @foreach ($allStudents as $user)
-                        <x-t-row>
-                            <x-t-data>{{ $user->name }}</x-t-data>
-                            <x-t-data>{{ $user->email }}</x-t-data>
-                            @if ($user->classeAsParticipant->count() > 0)
-                                <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
-                            @else
-                                <x-t-data>{{ __('N/A') }}</x-t-data>
-                            @endif
-                            @if (Auth::user()->roles[0]->name == 'super-admin')
-                                <x-t-data>
-                                    <a href="{{ route('classes.student', $user->id) }}"
-                                        class="text-gray-500 hover:underline">Anexar a uma turma</a>
-                                </x-t-data>
-                            @endif
-                        </x-t-row>
-                    @endforeach
-                @endif
-                @if (request('type') == 'Turmas' || $isEmpty)
-                    @foreach ($allClasses as $class)
-                        <x-t-row>
-                            <x-t-data>{{ $class->name }}</x-t-data>
-                            <x-t-data>{{ $class->year }}</x-t-data>
-                            <x-t-data class="uppercase">{{ $class->shift }}</x-t-data>
-                        </x-t-row>
-                    @endforeach
-                @endif
+                                                            <x-primary-button class="ms-3">
+                                                                {{ __('Enviar') }}
+                                                            </x-primary-button>
+                                                        </div>
+                                                    </form>
+                                                </x-modal>
+                                            </x-t-data>
+                                        @else
+                                            <x-t-data>{{ 'Feedback enviado!' }}</x-t-data>
+                                        @endif
+                                    @endif
+                                    @if (Auth::user()->roles[0]->name == 'super-admin')
+                                        <x-t-data>
+                                            <a href="{{ route('classes.attach-teacher', $user->id) }}"
+                                                class="text-gray-500 hover:underline">Anexar/Editar turma ou disciplina</a>
+                                        </x-t-data>
+                                    @endif
+                                    @if (Auth::user()->roles[0]->name == 'teacher' || Auth::user()->roles[0]->name == 'super-admin')
+                                        <x-t-data>
+                                            <a href="professores/{{ $user->id }}/feedbacks"
+                                                class="text-gray-500 text-sm hover:underline">
+                                                Ver Feedbacks
+                                            </a>
+                                        </x-t-data>
+                                    @endif
+                                </x-t-row>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                <div x-data="{ shown: false }" x-intersect="shown = true">
+                    <div x-show="shown" x-transition>
+                        @if (request('type') == 'Alunos')
+                            @foreach ($allStudents as $user)
+                                <x-t-row>
+                                    <x-t-data>{{ $user->name }}</x-t-data>
+                                    <x-t-data>{{ $user->email }}</x-t-data>
+                                    @if ($user->classeAsParticipant->count() > 0)
+                                        <x-t-data>{{ $user->classeAsParticipant->first()->name }}</x-t-data>
+                                    @else
+                                        <x-t-data>{{ __('N/A') }}</x-t-data>
+                                    @endif
+                                    @if (Auth::user()->roles[0]->name == 'super-admin')
+                                        <x-t-data>
+                                            <a href="{{ route('classes.student', $user->id) }}"
+                                                class="text-gray-500 hover:underline">Anexar a uma turma</a>
+                                        </x-t-data>
+                                    @endif
+                                </x-t-row>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                <div x-data="{ shown: false }" x-intersect="shown = true">
+                    <div x-show="shown" x-transition>
+                        @if (request('type') == 'Turmas' || $isEmpty)
+                            @foreach ($allClasses as $class)
+                                <x-t-row>
+                                    <x-t-data>{{ $class->name }}</x-t-data>
+                                    <x-t-data>{{ $class->year }}</x-t-data>
+                                    <x-t-data class="uppercase">{{ $class->shift }}</x-t-data>
+                                </x-t-row>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
             </x-table-body>
         </x-table>
     </div>

@@ -50,8 +50,8 @@ class PermissionsSeeder extends Seeder
         $student->givePermissionTo(['comment']);
 
         $admin = User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
+            'name' => 'Usuário Administrador',
+            'email' => 'admin@email.com',
             'password' => Hash::make(env('ADMIN_PASSWORD', 'admin$123')),
             'cpf' => '12345678912',
             'role_id' => '1'

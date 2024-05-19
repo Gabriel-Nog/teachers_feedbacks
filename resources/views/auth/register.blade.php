@@ -14,7 +14,7 @@
         <div class="col-start-2 col-end-2">
             <x-input-label for="cpf" :value="__('CPF')" />
             <x-text-input id="cpf" class="block mt-1 w-full" type="text" name="cpf" :value="old('cpf')"
-                required autocomplete="cpf" />
+                required />
             <x-input-error :messages="$errors->get('cpf')" class="mt-2" />
         </div>
 
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Password -->
-        <div class=col-start-1 col-end-1">
+        <div class="col-start-1 col-end-1">
             <x-input-label for="password" :value="__('Senha')" />
 
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required

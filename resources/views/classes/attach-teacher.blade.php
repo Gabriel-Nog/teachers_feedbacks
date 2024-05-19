@@ -25,9 +25,9 @@
                 <option disabled select>Selecione a turma</option>
                 @foreach ($classes as $class)
                     @if ($user->classeAsParticipant->count() > 0 && $user->classeAsParticipant->first()->id == $class->id)
-                        <option value="{{ $class->id }}" selected>{{ $class->name }}</option>
+                        <option value="{{ $class->id }}" selected>{{ $class->name. '  |  '. $class->shift . '  |  '. $class->year }}</option>
                     @else
-                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        <option value="{{ $class->id }}">{{ $class->name. ' | '. $class->shift . ' | '. $class->year}}</option>
                     @endif
                 @endforeach
             </select>

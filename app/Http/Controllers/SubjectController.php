@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Classes;
 use App\Models\ClassesUser;
+use App\Models\Student;
 use App\Models\Subjects;
 use App\Models\SubjectsUser;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -46,11 +48,6 @@ class SubjectController extends Controller
         ]);
 
 
-        // SubjectsUser::create([
-        //     'user_id' => $request->user_id,
-        //     'subjects_id' => $subjectId
-        // ]);
-
         return redirect()
             ->route('dashboard')
             ->with('msg', 'Disciplina Criada Com Sucesso!');
@@ -88,7 +85,9 @@ class SubjectController extends Controller
                 'user_id' => $id,
                 'subject' => $subject->first()->name
             ]);
+
         }
+
 
         if ($request->subjects_id) {
             $subjectsUser = SubjectsUser::updateOrCreate([
@@ -96,6 +95,28 @@ class SubjectController extends Controller
                 'subjects_id' => $request->subjects_id
             ]);
         }
+
+        //Resgata a Classe em questão
+        $classesId = ClassesUser::where('classes_id',$request->classes_id)->first();
+        //Resgata a Disciplina em questão
+        $subjectId = $subject[0]->id;
+        //Resgata o usuário em questão
+        $userAttached = User::where('id', $subjectsUser->user_id)->first();
+        
+
+
+        //Confirmação de Roles;
+        $teacher = 2;
+
+        //Inserindo nas model de Teacher e Student;
+        if( $userAttached->role_id == $teacher ){
+            $userAttached = Teacher::updateOrInsert(
+                ['user_id' =>  $userAttached->id],
+                ['classes_id' => $classesId->classes_id, 'subject_id' => $subjectId, 'role_id' =>  $userAttached->role_id, 'created_at' => now(), 'updated_at' =>now()]
+            );
+
+        }
+
 
         return redirect()->route('dashboard')->with('Usuário anexado com sucesso!');
     }
